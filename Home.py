@@ -20,7 +20,7 @@ render_sidebar("home")
 # ── Hero ───────────────────────────────────────────────────────────────────────
 render_hero(
     title="⚛️ QUANTUM PLAYGROUND",
-    subtitle="The weirdest, most wonderful corner of science — made for the curious",
+    subtitle="Step into the weirdest corner of the universe!!!",
 )
 
 # ── Intro ──────────────────────────────────────────────────────────────────────

@@ -36,7 +36,7 @@ We start the same way as before, putting the first qubit into superposition with
 Then we add one new move: a <b style="color:#ffe066;">CNOT gate</b>.
 A CNOT ties the second qubit to the first, so the second one copies whatever the first becomes.<br><br>
 Once we do this, the two qubits are <b style="color:#f59e0b;">entangled</b>. They are no longer two
-separate coins — they are one linked system with a shared fate.
+separate coins, they are one linked system with a shared fate.
 </div>
 """, unsafe_allow_html=True)
 
@@ -193,8 +193,8 @@ st.markdown("""
   <div style="font-family:'Orbitron',sans-serif; color:#f59e0b; font-size:1rem;
               letter-spacing:0.1em; margin-bottom:0.6em;">YOU DID IT.</div>
   <div style="color:#d4c5f9;">
-    You have now explored superposition, how it scales across qubits, and entanglement —
-    the three ideas at the very heart of quantum computing.
+    You have now explored superposition, how it scales across qubits, and entanglement. 
+    The three ideas at the very heart of quantum computing.
     That is more than most adults will ever understand about the quantum world.
     <b style="color:#ffe066;">Welcome to the future.</b>
   </div>

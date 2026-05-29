@@ -141,7 +141,7 @@ with st.expander("🧠 Want to go a little deeper? (The Bloch sphere)"):
     If the arrow points straight up, the qubit is definitely heads (0).
     Straight down means definitely tails (1).
     When our qubit is in superposition, the arrow points straight out at the <b style="color:#a78bfa;">equator</b>,
-    perfectly balanced between the two — that is exactly what the Hadamard gate did.<br><br>
+    perfectly balanced between the two and that is exactly what the Hadamard gate did.<br><br>
     Measuring the qubit forces that arrow to snap up or down, which is why you get heads or tails.
     </div>
     """, unsafe_allow_html=True)

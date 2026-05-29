@@ -1,0 +1,101 @@
+"""
+Quantum Playground - Home
+An interactive web app to teach quantum computing concepts to middle and high schoolers.
+Built by Ouarda Wilson, IBM Qiskit Advocate.
+"""
+
+import streamlit as st
+
+st.set_page_config(
+    page_title="Quantum Playground",
+    page_icon="🪐",
+    layout="centered",
+)
+
+# ---- Styling ----
+st.markdown(
+    """
+    <style>
+    .big-title {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(90deg, #7b2ff7, #f107a3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0;
+    }
+    .subtitle {
+        font-size: 1.25rem;
+        color: #b8b8d0;
+        margin-top: 0.25rem;
+    }
+    .module-card {
+        background: rgba(123, 47, 247, 0.08);
+        border: 1px solid rgba(123, 47, 247, 0.3);
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---- Hero ----
+st.markdown('<p class="big-title">Quantum Playground 🪐</p>', unsafe_allow_html=True)
+st.markdown(
+    '<p class="subtitle">The weirdest, most wonderful corner of science, made just for the curious.</p>',
+    unsafe_allow_html=True,
+)
+
+st.write("")
+st.write(
+    "Quantum computing sounds like magic. It is not. But it is genuinely strange, "
+    "and once you see it for yourself, you will never look at the universe the same way again."
+)
+st.write(
+    "Everything here runs on **real quantum circuits** using Qiskit, the same open-source "
+    "toolkit researchers use. No equations required. Just click, explore, and let yourself be amazed."
+)
+
+st.write("---")
+st.subheader("Pick a place to start")
+
+with st.container():
+    st.markdown(
+        '<div class="module-card">'
+        "<h4>🪙 Module 1 — Superposition</h4>"
+        "<p>A regular coin is heads or tails. A quantum coin is <b>both at once</b> until you look. "
+        "Meet the quantum coin.</p>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    st.page_link("pages/1_Superposition.py", label="Start Module 1 →")
+
+with st.container():
+    st.markdown(
+        '<div class="module-card">'
+        "<h4>🎲 Module 2 — Two Qubits</h4>"
+        "<p>One quantum coin gives you 2 possibilities. Two give you 4, all at the same time. "
+        "Watch the magic multiply.</p>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    st.page_link("pages/2_Two_Qubits.py", label="Start Module 2 →")
+
+with st.container():
+    st.markdown(
+        '<div class="module-card">'
+        "<h4>🔗 Module 3 — Entanglement</h4>"
+        "<p>Two quantum coins can become linked so that measuring one instantly tells you the other. "
+        "Einstein called it spooky.</p>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    st.page_link("pages/3_Entanglement.py", label="Start Module 3 →")
+
+st.write("---")
+st.caption(
+    "Built by Ouarda Wilson, IBM Qiskit Advocate. Made to help the next generation "
+    "feel the wonder of quantum science. Powered by Qiskit + Streamlit."
+)

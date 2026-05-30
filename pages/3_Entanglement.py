@@ -126,9 +126,9 @@ Einstein hated this. He called it <b style="color:#ffe066;">"spooky action at a 
 it seemed impossible that two particles could be so perfectly linked.
 But experiments have proven it real, over and over, for decades.
 In 2022 the Nobel Prize in Physics was awarded for exactly this kind of work.<br><br>
-Entanglement is not just a curiosity. It is the foundation of:
 </div>
 """, unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">🌌 Entanglement is not just a curiosity. It is the foundation of: </div>', unsafe_allow_html=True)
 
 col_a, col_b, col_c = st.columns(3)
 for col, icon, title, desc in [

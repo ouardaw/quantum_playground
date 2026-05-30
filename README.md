@@ -1,8 +1,8 @@
 # Quantum Playground 🪐
 
-An interactive web app that teaches quantum computing concepts to middle and high school students using real Qiskit circuits. No equations required, just curiosity.
+An interactive web app that teaches quantum computing concepts to middle and high school students using real Qiskit circuits. No equations required, just curiosity. Live at https://quantumplayground.streamlit.app/
 
-Built by Ouarda Jodi Wilson, IBM Qiskit Advocate.
+Built by Ouarda Jouidi Wilson, IBM Qiskit Advocate.
 
 ## Modules
 1. **Superposition** — The Quantum Coin. A qubit can be heads and tails at once, using a real Hadamard gate.

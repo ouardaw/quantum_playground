@@ -6,8 +6,8 @@ Built by Ouarda Jodi Wilson, IBM Qiskit Advocate.
 
 ## Modules
 1. **Superposition** — The Quantum Coin. A qubit can be heads and tails at once, using a real Hadamard gate.
-2. **Two Qubits** *(coming soon)* — Superposition scales: two qubits hold four possibilities at once.
-3. **Entanglement** *(coming soon)* — Two linked qubits and Einstein's "spooky action at a distance."
+2. **Two Qubits**  — Superposition scales: two qubits hold four possibilities at once.
+3. **Entanglement**  — Two linked qubits and Einstein's "spooky action at a distance."
 
 ## Run locally
 ```bash

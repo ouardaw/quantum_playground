@@ -1,7 +1,7 @@
 """
 Quantum Playground - Home
 An interactive web app to teach quantum computing concepts.
-
+Built by Ouarda Wilson, IBM Qiskit Advocate.
 """
 
 import streamlit as st
@@ -30,8 +30,8 @@ st.markdown("""
     Quantum computing sounds like magic. It is not. But it is genuinely strange,
     and once you see it for yourself, you will never look at the universe the same way again.<br><br>
     Everything here is built with <b style="color:#ffe066;">real quantum circuits</b> in Qiskit,
-    the same open-source toolkit researchers use, and simulated exactly on your computer.
-    No equations required. Just click, explore, and let yourself be amazed.
+    the same open-source toolkit researchers use, and simulated exactly with Qiskit's
+    statevector tools. No equations required. Just click, explore, and let yourself be amazed.
   </span>
 </div>
 """, unsafe_allow_html=True)

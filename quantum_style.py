@@ -268,6 +268,15 @@ def inject_quantum_css():
         color: #ffe066 !important;
         box-shadow: 0 0 18px rgba(124,58,237,0.50) !important;
     }
+    /* Force link label color regardless of the viewer's browser theme */
+    a[data-testid="stPageLink-NavLink"] p,
+    a[data-testid="stPageLink-NavLink"] span {
+        color: #d4c5f9 !important;
+    }
+    a[data-testid="stPageLink-NavLink"]:hover p,
+    a[data-testid="stPageLink-NavLink"]:hover span {
+        color: #ffe066 !important;
+    }
 
     /* ── Expander, prominent glowing panel ───────────────────────── */
     div[data-testid="stExpander"] {
@@ -538,6 +547,45 @@ def bloch_sphere_fig(statevector, title="Your qubit on the Bloch sphere"):
         margin=dict(l=0, r=0, t=40, b=0),
         height=420,
     )
+    return fig
+
+
+# ── 2-D Bloch view (Matplotlib fallback for browsers without WebGL) ───────────
+def bloch_2d_fig(statevector, title="Your qubit (2D view)"):
+    """
+    Flat X-Z slice of the Bloch sphere drawn with Matplotlib.
+    Complete (not a projection) for X, H, Z, and RY gates: their real-valued
+    matrices keep the Bloch vector in this plane.
+    """
+    import numpy as np
+
+    a, b = statevector.data[0], statevector.data[1]
+    bx = 2 * (np.conj(a) * b).real
+    bz = abs(a) ** 2 - abs(b) ** 2
+
+    fig, ax = plt.subplots(figsize=(4.4, 4.4), facecolor=BG_MID)
+    ax.set_facecolor(BG_DEEP)
+
+    t = np.linspace(0, 2 * np.pi, 200)
+    ax.plot(np.cos(t), np.sin(t), color=PURPLE2, lw=1.6)
+    ax.axhline(0, color=GOLD, lw=1.1, ls="--", alpha=0.65)
+    ax.axvline(0, color="#6b7280", lw=0.8, ls=":", alpha=0.6)
+
+    ax.annotate(
+        "", xy=(bx, bz), xytext=(0, 0),
+        arrowprops=dict(arrowstyle="-|>", color=GOLD2, lw=3.2, mutation_scale=24),
+    )
+
+    ax.text(0, 1.14, "|0⟩  Heads", ha="center", color=GOLD2, fontsize=11, fontweight="bold")
+    ax.text(0, -1.24, "|1⟩  Tails", ha="center", color=MUTED, fontsize=11, fontweight="bold")
+    ax.text(1.04, 0.05, "superposition", color=GOLD, fontsize=8, alpha=0.9)
+
+    ax.set_xlim(-1.4, 1.55)
+    ax.set_ylim(-1.4, 1.35)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title(title, color=GOLD, fontsize=11, fontweight="bold", pad=8)
+    fig.tight_layout()
     return fig
 
 

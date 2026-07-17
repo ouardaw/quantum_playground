@@ -1,5 +1,5 @@
 """
-quantum_style.py — Shared cosmic styling for Quantum Playground.
+quantum_style.py - Shared cosmic styling for Quantum Playground.
 Matches the Stellaris app: dark space background, Orbitron font,
 glowing cosmic-card, 3-D sidebar nav buttons (amber/orange) and
 3-D page-body buttons (purple/blue).
@@ -52,13 +52,13 @@ def inject_quantum_css():
         border-right: 1px solid rgba(124,58,237,0.30) !important;
     }
 
-    /* ── Sidebar navigation buttons — amber/orange 3-D (Stellaris style) */
+    /* ── Sidebar navigation buttons, amber/orange 3-D (Stellaris style) */
     section[data-testid="stSidebar"] button {
         background: linear-gradient(135deg, #f59e0b 0%, #fb923c 50%, #ea580c 100%) !important;
         color: #fff !important;
         font-family: 'Orbitron', sans-serif !important;
         border: none !important;
-        border-radius: 0px !important;
+        border-radius: 16px !important;
         font-size: 1rem !important;
         margin-bottom: 0.65em !important;
         font-weight: 700 !important;
@@ -102,17 +102,17 @@ def inject_quantum_css():
         top: 0; left: 0; right: 0;
         height: 46%;
         background: linear-gradient(to bottom, rgba(255,255,255,0.28), rgba(255,255,255,0.05));
-        border-radius: 0;
+        border-radius: 16px 16px 0 0;
         pointer-events: none;
     }
 
-    /* ── Page-body buttons — purple/blue 3-D ───────────────────── */
+    /* ── Page-body buttons, purple/blue 3-D ───────────────────── */
     .stButton > button {
         background: linear-gradient(135deg, #7c3aed 0%, #3a86ff 100%) !important;
         color: #fff !important;
         font-family: 'Orbitron', sans-serif !important;
         border: none !important;
-        border-radius: 0px !important;
+        border-radius: 14px !important;
         font-weight: 700 !important;
         letter-spacing: 0.07em !important;
         padding: 0.75em 1.5em !important;
@@ -144,6 +144,7 @@ def inject_quantum_css():
         top: 0; left: 0; right: 0;
         height: 45%;
         background: linear-gradient(to bottom, rgba(255,255,255,0.22), rgba(255,255,255,0.05));
+        border-radius: 14px 14px 0 0;
         pointer-events: none;
     }
 
@@ -268,15 +269,60 @@ def inject_quantum_css():
         box-shadow: 0 0 18px rgba(124,58,237,0.50) !important;
     }
 
-    /* ── Expander ─────────────────────────────────────────────────── */
-    details {
-        background: rgba(124,58,237,0.07) !important;
-        border: 1px solid rgba(124,58,237,0.28) !important;
-        border-radius: 16px !important;
-        padding: 0.3em 0.6em !important;
-        margin-bottom: 0.8em !important;
+    /* ── Expander, prominent glowing panel ───────────────────────── */
+    div[data-testid="stExpander"] {
+        margin-bottom: 1em !important;
     }
-    summary { color: #a78bfa !important; font-family: 'Space Grotesk', sans-serif !important; font-weight: 600 !important; }
+    div[data-testid="stExpander"] details {
+        background: linear-gradient(120deg, rgba(245,158,11,0.12), rgba(124,58,237,0.18)) !important;
+        border: 2px solid rgba(245,158,11,0.45) !important;
+        border-radius: 18px !important;
+        padding: 0.35em 0.7em !important;
+        box-shadow:
+            0 4px 20px rgba(124,58,237,0.30),
+            0 0 14px rgba(245,158,11,0.20),
+            inset 0 1px 0 rgba(255,255,255,0.08) !important;
+        transition: all 0.25s ease !important;
+    }
+    div[data-testid="stExpander"] details:hover {
+        border-color: rgba(255,224,102,0.75) !important;
+        box-shadow:
+            0 6px 28px rgba(124,58,237,0.45),
+            0 0 24px rgba(245,158,11,0.40),
+            inset 0 1px 0 rgba(255,255,255,0.12) !important;
+        transform: translateY(-2px);
+    }
+    div[data-testid="stExpander"] summary {
+        color: #ffe066 !important;
+        font-family: 'Orbitron', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 1.02rem !important;
+        letter-spacing: 0.05em !important;
+        padding: 0.55em 0.3em !important;
+    }
+    div[data-testid="stExpander"] summary:hover {
+        color: #fbbf24 !important;
+    }
+    div[data-testid="stExpander"] summary p {
+        font-family: 'Orbitron', sans-serif !important;
+        font-size: 1.02rem !important;
+        color: #ffe066 !important;
+    }
+    div[data-testid="stExpander"] summary svg {
+        fill: #f59e0b !important;
+        width: 1.4em !important;
+        height: 1.4em !important;
+    }
+    /* fallback for plain details/summary */
+    details {
+        background: linear-gradient(120deg, rgba(245,158,11,0.12), rgba(124,58,237,0.18)) !important;
+        border: 2px solid rgba(245,158,11,0.45) !important;
+        border-radius: 18px !important;
+        padding: 0.35em 0.7em !important;
+        margin-bottom: 0.9em !important;
+        box-shadow: 0 4px 20px rgba(124,58,237,0.30), 0 0 14px rgba(245,158,11,0.20) !important;
+    }
+    summary { color: #ffe066 !important; font-family: 'Orbitron', sans-serif !important; font-weight: 700 !important; }
 
     /* ── Code blocks ──────────────────────────────────────────────── */
     .stCodeBlock, pre {
@@ -297,12 +343,32 @@ def inject_quantum_css():
     """, unsafe_allow_html=True)
 
 
+# ── Progress tracking ──────────────────────────────────────────────────────────
+MODULE_KEYS = ["superposition", "two_qubits", "entanglement", "gates_lab"]
+
+
+def mark_complete(module_key: str):
+    """Mark a module complete; rerun so the sidebar checkmark updates instantly."""
+    completed = st.session_state.setdefault("completed", set())
+    if module_key not in completed:
+        completed.add(module_key)
+        st.rerun()
+
+
+def next_module_button(label: str, path: str, key: str):
+    """Big forward-navigation button at the bottom of a module page."""
+    if st.button(f"➡️ NEXT: {label}", key=key, use_container_width=True):
+        st.switch_page(path)
+
+
 # ── Sidebar renderer ───────────────────────────────────────────────────────────
 def render_sidebar(active: str = "home"):
     """
-    Render the Stellaris-style sidebar nav with amber/orange 3-D buttons.
-    active: one of 'home', 'superposition', 'two_qubits', 'entanglement'
+    Render the Stellaris-style sidebar nav with amber/orange 3-D buttons,
+    completion checkmarks, and a mission progress bar.
     """
+    completed = st.session_state.setdefault("completed", set())
+
     with st.sidebar:
         # ── Info card (mirrors "Stargazer!" in Stellaris) ─────────
         st.markdown("""
@@ -331,19 +397,41 @@ def render_sidebar(active: str = "home"):
             unsafe_allow_html=True,
         )
 
-        # ── Navigation buttons ────────────────────────────────────
+        # ── Navigation buttons (✅ = module completed) ─────────────
         pages = [
-            ("🌌", "HOME",          "home",          "Home.py"),
-            ("🪙", "SUPERPOSITION", "superposition", "pages/1_Superposition.py"),
-            ("🎲", "TWO QUBITS",    "two_qubits",    "pages/2_Two_Qubits.py"),
-            ("🔗", "ENTANGLEMENT",  "entanglement",  "pages/3_Entanglement.py"),
+            ("🌌", "HOME",          "home",          "Home.py",                   None),
+            ("🪙", "SUPERPOSITION", "superposition", "pages/1_Superposition.py",  "superposition"),
+            ("🎲", "TWO QUBITS",    "two_qubits",    "pages/2_Two_Qubits.py",     "two_qubits"),
+            ("🔗", "ENTANGLEMENT",  "entanglement",  "pages/3_Entanglement.py",   "entanglement"),
+            ("🎛️", "GATES LAB",     "gates_lab",     "pages/4_Gates_Lab.py",      "gates_lab"),
         ]
 
-        for icon, label, key, path in pages:
-            # Highlight active page with slightly brighter button
-            btn_label = f"{icon}  {label}"
-            if st.button(btn_label, key=f"nav_{key}", use_container_width=True):
+        for icon, label, key, path, ckey in pages:
+            check = "  ✅" if ckey and ckey in completed else ""
+            if st.button(f"{icon}  {label}{check}", key=f"nav_{key}", use_container_width=True):
                 st.switch_page(path)
+
+        # ── Mission progress bar ───────────────────────────────────
+        done = len(completed & set(MODULE_KEYS))
+        total = len(MODULE_KEYS)
+        pct = int(done / total * 100)
+        trophy = " 🏆" if done == total else ""
+        st.markdown(f"""
+        <div style="margin-top:0.9em;">
+          <div style="font-family:'Orbitron',sans-serif; color:#a78bfa; font-size:0.72rem;
+                      letter-spacing:0.14em; text-align:center; margin-bottom:0.35em;">
+            MISSION PROGRESS: {done}/{total}{trophy}
+          </div>
+          <div style="background:rgba(124,58,237,0.18); border-radius:10px; height:13px;
+                      overflow:hidden; border:1px solid rgba(124,58,237,0.45);
+                      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);">
+            <div style="width:{pct}%; height:100%;
+                        background:linear-gradient(90deg,#f59e0b,#fb923c,#7c3aed);
+                        border-radius:10px; transition:width 0.6s ease;
+                        box-shadow: 0 0 10px rgba(245,158,11,0.6);"></div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 # ── Hero banner ────────────────────────────────────────────────────────────────
@@ -368,6 +456,89 @@ def cosmic_card(html_body: str):
 
 def callout(html_body: str):
     st.markdown(f'<div class="callout-quantum">{html_body}</div>', unsafe_allow_html=True)
+
+
+# ── Interactive 3-D Bloch sphere (Plotly) ─────────────────────────────────────
+def bloch_sphere_fig(statevector, title="Your qubit on the Bloch sphere"):
+    """
+    Build an interactive dark-themed Plotly Bloch sphere for a 1-qubit Statevector.
+    The gold arrow is the qubit state; drag to rotate, scroll to zoom.
+    """
+    import numpy as np
+    import plotly.graph_objects as go
+
+    a, b = statevector.data[0], statevector.data[1]
+    # Bloch vector: <X>, <Y>, <Z>
+    bx = 2 * (np.conj(a) * b).real
+    by = 2 * (np.conj(a) * b).imag
+    bz = abs(a) ** 2 - abs(b) ** 2
+
+    fig = go.Figure()
+
+    # Translucent sphere surface
+    u, v = np.mgrid[0 : 2 * np.pi : 60j, 0 : np.pi : 30j]
+    fig.add_surface(
+        x=np.cos(u) * np.sin(v),
+        y=np.sin(u) * np.sin(v),
+        z=np.cos(v),
+        opacity=0.16,
+        showscale=False,
+        colorscale=[[0, PURPLE], [1, BLUE]],
+        hoverinfo="skip",
+    )
+
+    # Equator ring (superposition zone)
+    t = np.linspace(0, 2 * np.pi, 120)
+    fig.add_scatter3d(
+        x=np.cos(t), y=np.sin(t), z=np.zeros_like(t),
+        mode="lines", line=dict(color=GOLD, width=4),
+        hoverinfo="skip", showlegend=False,
+    )
+
+    # Vertical axis |0> to |1>
+    fig.add_scatter3d(
+        x=[0, 0], y=[0, 0], z=[-1.15, 1.15],
+        mode="lines", line=dict(color="#6b7280", width=2, dash="dash"),
+        hoverinfo="skip", showlegend=False,
+    )
+
+    # State arrow (shaft + cone tip)
+    fig.add_scatter3d(
+        x=[0, bx], y=[0, by], z=[0, bz],
+        mode="lines", line=dict(color=GOLD2, width=10),
+        hoverinfo="skip", showlegend=False,
+    )
+    fig.add_cone(
+        x=[bx], y=[by], z=[bz],
+        u=[bx * 0.25], v=[by * 0.25], w=[bz * 0.25],
+        sizemode="absolute", sizeref=0.18, anchor="tip",
+        colorscale=[[0, GOLD2], [1, GOLD2]], showscale=False,
+        hoverinfo="skip",
+    )
+
+    # Pole + equator labels
+    fig.add_scatter3d(
+        x=[0, 0, 1.25], y=[0, 0, 0], z=[1.3, -1.3, 0],
+        mode="text",
+        text=["|0⟩  👑 Heads", "|1⟩  🪙 Tails", "superposition"],
+        textfont=dict(size=13, color=[GOLD2, MUTED, GOLD]),
+        hoverinfo="skip", showlegend=False,
+    )
+
+    axis_off = dict(visible=False, showgrid=False, zeroline=False)
+    fig.update_layout(
+        title=dict(text=title, font=dict(color=GOLD, size=14), x=0.5),
+        paper_bgcolor="rgba(0,0,0,0)",
+        scene=dict(
+            xaxis=axis_off, yaxis=axis_off, zaxis=axis_off,
+            aspectmode="cube",
+            bgcolor="rgba(0,0,0,0)",
+            camera=dict(eye=dict(x=1.4, y=1.4, z=0.6)),
+        ),
+        margin=dict(l=0, r=0, t=40, b=0),
+        height=420,
+    )
+    return fig
 
 
 # ── Dark-themed Matplotlib bar chart ──────────────────────────────────────────

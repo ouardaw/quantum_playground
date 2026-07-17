@@ -1,7 +1,7 @@
 """
 Quantum Playground - Home
 An interactive web app to teach quantum computing concepts.
-Built by Ouarda Wilson, IBM Qiskit Advocate.
+
 """
 
 import streamlit as st

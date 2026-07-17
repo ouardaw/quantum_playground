@@ -1,5 +1,5 @@
 """
-Quantum Playground — Module 2: Two Qubits
+Quantum Playground - Module 2: Two Qubits
 Shows how superposition scales: two qubits hold all four possibilities at once.
 Uses real Qiskit circuits with two Hadamard gates.
 """
@@ -8,7 +8,10 @@ import streamlit as st
 import random
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
-from quantum_style import inject_quantum_css, render_hero, callout, dark_bar_chart, render_sidebar
+from quantum_style import (
+    inject_quantum_css, render_hero, callout, dark_bar_chart,
+    render_sidebar, mark_complete, next_module_button,
+)
 
 st.set_page_config(page_title="Two Qubits | Quantum Playground", page_icon="🎲", layout="centered", initial_sidebar_state="expanded")
 inject_quantum_css()
@@ -87,7 +90,7 @@ st.pyplot(dark_bar_chart(ordered, "Two qubits in superposition"))
 
 callout(
     "<b style='color:#ffe066;'>Whoa.</b> All four states (00, 01, 10, 11) exist at the same time, "
-    "each at 25%. The two qubits have not decided what they are — they are exploring every "
+    "each at 25%. The two qubits have not decided what they are. They are exploring every "
     "possibility at once."
 )
 
@@ -111,13 +114,16 @@ st.markdown("""
       <div style="color:#a78bfa; font-size:0.85rem;">10 qubits</div>
     </div>
     <div class="cosmic-card" style="padding:0.7rem; margin-bottom:0; text-align:center; border-radius:16px;">
-      <div style="font-family:'Orbitron',sans-serif; color:#ffe066; font-size:0.95rem; font-weight:700;">more than atoms<br>in the universe</div>
+      <div style="font-family:'Orbitron',sans-serif; color:#ffe066; font-size:0.95rem; font-weight:700;">more than atoms in the<br>observable universe</div>
       <div style="color:#a78bfa; font-size:0.85rem;">300 qubits</div>
     </div>
   </div>
   <div style="color:#d4c5f9; margin-top:0.9em;">
-    Every qubit you add <b style="color:#ffe066;">doubles</b> the number of states.
-    That explosion of possibilities is the secret behind quantum computing's power.
+    Every qubit you add <b style="color:#ffe066;">doubles</b> the number of states the system
+    can hold at once. But raw possibilities are only half the story. The real trick is that
+    quantum algorithms use <b style="color:#f59e0b;">interference</b> to make wrong answers
+    cancel out and right answers stand out. That combination is the engine of
+    quantum computing's power.
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -141,6 +147,7 @@ with col1:
         outcome = sv.sample_counts(1)
         bits = list(outcome.keys())[0]
         st.session_state.two_results.append(bits)
+        mark_complete("two_qubits")
 with col2:
     if st.button("🔄 Reset"):
         st.session_state.two_results = []
@@ -199,7 +206,7 @@ print(sv.sample_counts(1))  # e.g. {'10': 1}
 callout(
     "<b style='color:#ffe066;'>What you just learned:</b> adding qubits multiplies the possibilities "
     "a quantum system can hold at once. Two qubits, four states. The number doubles with every qubit "
-    "you add. That is the engine of quantum computing's power."
+    "you add, and quantum algorithms steer all those possibilities with interference to find answers."
 )
 
 st.markdown("""
@@ -209,4 +216,5 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.write("")
+next_module_button("MODULE 3: ENTANGLEMENT 🔗", "pages/3_Entanglement.py", "next_entanglement")
 st.page_link("Home.py", label="← Back to Home")

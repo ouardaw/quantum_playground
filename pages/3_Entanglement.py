@@ -1,5 +1,5 @@
 """
-Quantum Playground — Module 3: Entanglement
+Quantum Playground - Module 3: Entanglement
 The "spooky action at a distance." Two qubits linked with a Hadamard + CNOT (Bell state),
 so measuring one instantly determines the other. Uses real Qiskit circuits.
 """
@@ -7,7 +7,10 @@ so measuring one instantly determines the other. Uses real Qiskit circuits.
 import streamlit as st
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
-from quantum_style import inject_quantum_css, render_hero, callout, dark_bar_chart, render_sidebar
+from quantum_style import (
+    inject_quantum_css, render_hero, callout, dark_bar_chart,
+    render_sidebar, mark_complete, next_module_button,
+)
 
 st.set_page_config(page_title="Entanglement | Quantum Playground", page_icon="🔗", layout="centered", initial_sidebar_state="expanded")
 inject_quantum_css()
@@ -34,9 +37,11 @@ st.markdown("""
 We start the same way as before, putting the first qubit into superposition with a
 <b style="color:#a78bfa;">Hadamard gate</b>.
 Then we add one new move: a <b style="color:#ffe066;">CNOT gate</b>.
-A CNOT ties the second qubit to the first, so the second one copies whatever the first becomes.<br><br>
-Once we do this, the two qubits are <b style="color:#f59e0b;">entangled</b>. They are no longer two
-separate coins, they are one linked system with a shared fate.
+A CNOT looks at the first qubit and flips the second one <b>only if the first is tails (1)</b>.
+Do that while the first qubit is still in superposition, and something remarkable happens:
+the "flip" and the "don't flip" both occur at once, tying the two qubits together.<br><br>
+Now the two qubits are <b style="color:#f59e0b;">entangled</b>. They are no longer two
+separate coins. They are one linked system with a shared fate.
 </div>
 """, unsafe_allow_html=True)
 
@@ -56,7 +61,7 @@ st.code(
 )
 
 st.markdown('<div style="color:#a78bfa; font-size:0.95rem; margin-bottom:0.5em;">Look at what is possible now:</div>', unsafe_allow_html=True)
-st.pyplot(dark_bar_chart(ordered, "Entangled qubits — a Bell state"))
+st.pyplot(dark_bar_chart(ordered, "Entangled qubits: a Bell state"))
 
 callout(
     "<b style='color:#ffe066;'>Look closely.</b> Only <b>|00⟩</b> and <b>|11⟩</b> are possible, each at 50%. "
@@ -85,6 +90,7 @@ with col1:
         outcome = sv.sample_counts(1)
         bits = list(outcome.keys())[0]
         st.session_state.ent_results.append(bits)
+        mark_complete("entanglement")
 with col2:
     if st.button("🔄 Reset"):
         st.session_state.ent_results = []
@@ -126,9 +132,9 @@ Einstein hated this. He called it <b style="color:#ffe066;">"spooky action at a 
 it seemed impossible that two particles could be so perfectly linked.
 But experiments have proven it real, over and over, for decades.
 In 2022 the Nobel Prize in Physics was awarded for exactly this kind of work.<br><br>
+Entanglement is not just a curiosity. It is the foundation of:
 </div>
 """, unsafe_allow_html=True)
-st.markdown('<div class="cosmic-section">🌌 Entanglement is not just a curiosity. It is the foundation of: </div>', unsafe_allow_html=True)
 
 col_a, col_b, col_c = st.columns(3)
 for col, icon, title, desc in [
@@ -172,7 +178,7 @@ print(sv.sample_counts(1))  # e.g. {'11': 1}
 with st.expander("🤔 Wait, is anything traveling faster than light?"):
     st.markdown("""
     <div style="color:#d4c5f9;">
-    Great question — and the answer is <b style="color:#ffe066;">no</b>.
+    Great question, and the answer is <b style="color:#ffe066;">no</b>.
     Even though the qubits match instantly, you cannot use entanglement to send a message
     faster than light, because the outcome of each measurement is still random.
     You only discover the link <b style="color:#a78bfa;">after</b> you compare notes the normal way.
@@ -193,13 +199,19 @@ st.markdown("""
   <div style="font-family:'Orbitron',sans-serif; color:#f59e0b; font-size:1rem;
               letter-spacing:0.1em; margin-bottom:0.6em;">YOU DID IT.</div>
   <div style="color:#d4c5f9;">
-    You have now explored superposition, how it scales across qubits, and entanglement. 
-    The three ideas at the very heart of quantum computing.
+    You have now explored superposition, how it scales across qubits, and entanglement,
+    the three ideas at the very heart of quantum computing.
     That is more than most adults will ever understand about the quantum world.
     <b style="color:#ffe066;">Welcome to the future.</b>
   </div>
 </div>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<div style="text-align:center; color:#a78bfa; margin-top:0.5em;">
+  Ready to take the controls yourself? Build your own circuits in the <b style="color:#ffe066;">Gates Lab</b>. 🎛️
+</div>
+""", unsafe_allow_html=True)
 st.write("")
+next_module_button("MODULE 4: GATES LAB 🎛️", "pages/4_Gates_Lab.py", "next_gates_lab")
 st.page_link("Home.py", label="← Back to Home")

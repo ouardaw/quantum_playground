@@ -1,13 +1,18 @@
 """
-Quantum Playground — Module 1: Superposition
+Quantum Playground - Module 1: Superposition
 The Quantum Coin. Teaches superposition using a real Hadamard gate on a Qiskit statevector.
 """
 
 import streamlit as st
 import random
+import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
-from quantum_style import inject_quantum_css, render_hero, callout, dark_bar_chart, render_sidebar
+from quantum_style import (
+    inject_quantum_css, render_hero, callout,
+    dark_bar_chart, render_sidebar, bloch_sphere_fig,
+    mark_complete, next_module_button,
+)
 
 st.set_page_config(page_title="Superposition | Quantum Playground", page_icon="🪙", layout="centered", initial_sidebar_state="expanded")
 inject_quantum_css()
@@ -101,6 +106,7 @@ with col1:
         outcome = sv.sample_counts(1)
         bit = list(outcome.keys())[0]
         st.session_state.quantum_results.append("Heads" if bit == "0" else "Tails")
+        mark_complete("superposition")
 with col2:
     if st.button("🔄 Reset"):
         st.session_state.quantum_results = []
@@ -134,15 +140,62 @@ if st.session_state.quantum_results:
 
 # ── Going deeper ───────────────────────────────────────────────────────────────
 st.write("")
-with st.expander("🧠 Want to go a little deeper? (The Bloch sphere)"):
+with st.expander("🧠 Want to go a little deeper? (The Bloch sphere)", expanded=False):
     st.markdown("""
     <div style="color:#d4c5f9;">
     Scientists picture a qubit as an arrow inside a ball called the <b style="color:#ffe066;">Bloch sphere</b>.
     If the arrow points straight up, the qubit is definitely heads (0).
     Straight down means definitely tails (1).
     When our qubit is in superposition, the arrow points straight out at the <b style="color:#a78bfa;">equator</b>,
-    perfectly balanced between the two and that is exactly what the Hadamard gate did.<br><br>
+    perfectly balanced between the two. That is exactly what the Hadamard gate did.<br><br>
     Measuring the qubit forces that arrow to snap up or down, which is why you get heads or tails.
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<div class="cosmic-section" style="font-size:1.05rem;">🕹️ Try it yourself: tilt the qubit!</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div style="color:#d4c5f9; font-size:0.95rem; margin-bottom:0.4em;">
+    Drag the slider to rotate the qubit's arrow from heads (0°) to tails (180°).
+    The sphere below is <b style="color:#ffe066;">interactive</b>, so drag it to spin it around!
+    </div>
+    """, unsafe_allow_html=True)
+
+    theta_deg = st.slider("Rotation angle θ (degrees)", 0, 180, 90, 5)
+    qc_tilt = QuantumCircuit(1)
+    qc_tilt.ry(np.radians(theta_deg), 0)
+    sv_tilt = Statevector(qc_tilt)
+    p_heads, p_tails = sv_tilt.probabilities()
+
+    st.plotly_chart(
+        bloch_sphere_fig(sv_tilt, title=f"θ = {theta_deg}°: the arrow IS the qubit"),
+        use_container_width=True,
+        config={"displayModeBar": False},
+    )
+
+    st.markdown(f"""
+    <div class="cosmic-card" style="text-align:center; padding:0.8rem;">
+      <span style="color:#ffe066; font-size:1.1rem;">👑 Heads: <b>{p_heads*100:.0f}%</b></span>
+      <span style="color:#6b7280;"> · </span>
+      <span style="color:#a78bfa; font-size:1.1rem;">🪙 Tails: <b>{p_tails*100:.0f}%</b></span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if theta_deg == 0:
+        st.markdown('<div style="color:#a78bfa; text-align:center;">Arrow at the north pole → definitely heads. No quantum weirdness yet.</div>', unsafe_allow_html=True)
+    elif theta_deg == 180:
+        st.markdown('<div style="color:#a78bfa; text-align:center;">Arrow at the south pole → definitely tails.</div>', unsafe_allow_html=True)
+    elif theta_deg == 90:
+        st.markdown('<div style="color:#ffe066; text-align:center;">⭐ The equator! Perfect 50/50 superposition, exactly what the Hadamard gate does.</div>', unsafe_allow_html=True)
+    else:
+        st.markdown(f'<div style="color:#a78bfa; text-align:center;">A <b>lopsided</b> superposition, still both at once, but leaning one way. Qubits can be tilted to any angle!</div>', unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="callout-quantum" style="margin-top:0.8em;">
+    <b style="color:#ffe066;">One more secret:</b> a qubit in superposition is not just a hidden
+    coin flip. The <i>direction</i> the arrow points around the equator (called the
+    <b style="color:#a78bfa;">phase</b>) also matters, and it lets qubits <b>interfere</b> with
+    each other like waves, adding up or canceling out. No ordinary coin can do that,
+    and it is where quantum computers get their real power.
     </div>
     """, unsafe_allow_html=True)
 
@@ -182,4 +235,5 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.write("")
+next_module_button("MODULE 2: TWO QUBITS 🎲", "pages/2_Two_Qubits.py", "next_two_qubits")
 st.page_link("Home.py", label="← Back to Home")

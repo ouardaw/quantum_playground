@@ -139,7 +139,7 @@ Entanglement is not just a curiosity. It is the foundation of:
 col_a, col_b, col_c = st.columns(3)
 for col, icon, title, desc in [
     (col_a, "💻", "Quantum Computing", "Entangled qubits work together in ways normal bits never could"),
-    (col_b, "🔐", "Quantum Encryption", "Unbreakable codes that reveal if anyone is eavesdropping"),
+    (col_b, "🔐", "Quantum Encryption", "Codes that can reveal if anyone tries to eavesdrop"),
     (col_c, "🚀", "Quantum Teleportation", "Moving a quantum state from one place to another using entanglement"),
 ]:
     with col:

@@ -10,7 +10,7 @@ from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout, dark_bar_chart,
-    render_sidebar, bloch_sphere_fig, mark_complete,
+    render_sidebar, bloch_sphere_fig, bloch_2d_fig, mark_complete,
 )
 
 st.set_page_config(page_title="Gates Lab | Quantum Playground", page_icon="🎛️", layout="centered", initial_sidebar_state="expanded")
@@ -131,11 +131,21 @@ else:
     """, unsafe_allow_html=True)
 
 # ── Live state: sphere + probabilities ─────────────────────────────────────────
-st.plotly_chart(
-    bloch_sphere_fig(sv, title="Live Bloch sphere: the arrow IS your qubit"),
-    use_container_width=True,
-    config={"displayModeBar": False},
-)
+use_2d = st.toggle("Sphere not showing? Switch to the 2D view", key="bloch_2d_lab")
+if use_2d:
+    st.pyplot(bloch_2d_fig(sv, title="Live Bloch view: the arrow IS your qubit"))
+    st.markdown(
+        '<div style="color:#6b7280; font-size:0.82rem; text-align:center;">'
+        'Nothing is hidden in this flat view: X, H, Z, and RY always keep '
+        'the arrow in this slice of the sphere.</div>',
+        unsafe_allow_html=True,
+    )
+else:
+    st.plotly_chart(
+        bloch_sphere_fig(sv, title="Live Bloch sphere: the arrow IS your qubit"),
+        use_container_width=True,
+        config={"displayModeBar": False},
+    )
 
 st.pyplot(dark_bar_chart({"Heads": p_heads, "Tails": p_tails}, "Measurement chances right now"))
 
@@ -229,8 +239,12 @@ st.markdown("""
     <a href="https://quantum.ibm.com/composer" target="_blank"
        style="color:#ffe066; font-weight:700;">IBM Quantum Composer</a>,
     where you can build bigger circuits with the full gate set and run them on
-    <b style="color:#ffe066;">actual quantum computers</b>, for free.
-    Everything you learned here works exactly the same there.
+    <b style="color:#ffe066;">actual quantum computers</b>
+    (a free IBM account includes limited time on real devices).
+    The same ideas carry over, with one exciting twist: real hardware is
+    <b style="color:#f59e0b;">noisy</b>, so your perfect 50/50 might come out 48/52.
+    Spotting that noise is part of the fun, and taming it is one of the biggest
+    open challenges in quantum computing.
   </div>
 </div>
 """, unsafe_allow_html=True)

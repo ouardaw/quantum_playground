@@ -10,7 +10,7 @@ from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout,
-    dark_bar_chart, render_sidebar, bloch_sphere_fig,
+    dark_bar_chart, render_sidebar, bloch_sphere_fig, bloch_2d_fig,
     mark_complete, next_module_button,
 )
 
@@ -166,11 +166,21 @@ with st.expander("🧠 Want to go a little deeper? (The Bloch sphere)", expanded
     sv_tilt = Statevector(qc_tilt)
     p_heads, p_tails = sv_tilt.probabilities()
 
-    st.plotly_chart(
-        bloch_sphere_fig(sv_tilt, title=f"θ = {theta_deg}°: the arrow IS the qubit"),
-        use_container_width=True,
-        config={"displayModeBar": False},
-    )
+    use_2d = st.toggle("Sphere not showing? Switch to the 2D view", key="bloch_2d_m1")
+    if use_2d:
+        st.pyplot(bloch_2d_fig(sv_tilt, title=f"θ = {theta_deg}°: the arrow IS the qubit"))
+        st.markdown(
+            '<div style="color:#6b7280; font-size:0.82rem; text-align:center;">'
+            'Nothing is hidden in this flat view: the gates in this app always keep '
+            'the arrow in this slice of the sphere.</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.plotly_chart(
+            bloch_sphere_fig(sv_tilt, title=f"θ = {theta_deg}°: the arrow IS the qubit"),
+            use_container_width=True,
+            config={"displayModeBar": False},
+        )
 
     st.markdown(f"""
     <div class="cosmic-card" style="text-align:center; padding:0.8rem;">

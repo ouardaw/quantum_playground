@@ -4,11 +4,9 @@
 
 No equations. No installs. No physics degree required. Just click, explore, and discover superposition, entanglement, and quantum gates the way they should be discovered: by playing with them.
 
-🚀 **[Try it live](https://YOUR-APP-URL.streamlit.app)** &nbsp;·&nbsp; Built by [Ouarda Jodi Wilson](https://www.linkedin.com/in/YOUR-PROFILE), IBM Qiskit Advocate
+🚀 **[Try it live](https://quantumplayground.streamlit.app/)** &nbsp;·&nbsp; Built by [Ouarda Jouidi Wilson](https://www.linkedin.com/in/ouarda-jw/), IBM Qiskit Advocate
 
-<!-- Add a hero screenshot or GIF here after deploying:
-![Quantum Playground](docs/screenshot-home.png)
--->
+
 
 ## What's inside
 
@@ -32,7 +30,7 @@ Every interaction runs a **real Qiskit circuit**, simulated exactly. The probabi
 ## Run locally
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/quantum_playground.git
+git clone https://github.com/ouardaw/quantum_playground.git
 cd quantum_playground
 pip install -r requirements.txt
 streamlit run Home.py
@@ -53,7 +51,7 @@ This app was designed for classrooms, STEM clubs, and quantum outreach events. E
 
 ## Feedback
 
-Found a bug, have an idea, or used this with students? [Open an issue](https://github.com/YOUR-USERNAME/quantum_playground/issues) or reach out on LinkedIn. Feedback from real classrooms shapes what gets built next.
+Found a bug, have an idea, or used this with students? [Open an issue](https://github.com/ouardaw/quantum_playground/issues) or reach out on LinkedIn. Feedback from real classrooms shapes what gets built next.
 
 ## Disclaimer
 

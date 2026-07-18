@@ -11,7 +11,7 @@ from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout,
     dark_bar_chart, render_sidebar, bloch_sphere_fig, bloch_2d_fig,
-    mark_complete, next_module_button,
+    mark_complete, next_module_button, coin_html,
 )
 
 st.set_page_config(page_title="Superposition | Quantum Playground", page_icon="🪙", layout="centered", initial_sidebar_state="expanded")
@@ -42,9 +42,8 @@ if st.button("🪙 Flip a normal coin"):
     st.session_state.classical_flip = random.choice(["Heads", "Tails"])
 
 if st.session_state.classical_flip:
-    emoji = "👑" if st.session_state.classical_flip == "Heads" else "🪙"
     st.markdown(
-        f'<div class="result-display">{emoji}<br>'
+        f'<div class="result-display">{coin_html(st.session_state.classical_flip, 84)}<br>'
         f'<span style="font-family:\'Space Grotesk\',sans-serif; font-size:1.8rem; color:#f59e0b;">'
         f'{st.session_state.classical_flip}</span></div>',
         unsafe_allow_html=True,
@@ -113,9 +112,8 @@ with col2:
 
 if st.session_state.quantum_results:
     latest = st.session_state.quantum_results[-1]
-    emoji = "👑" if latest == "Heads" else "🪙"
     st.markdown(
-        f'<div class="result-display">{emoji}<br>'
+        f'<div class="result-display">{coin_html(latest, 84)}<br>'
         f'<span style="font-family:\'Space Grotesk\',sans-serif; font-size:1.8rem; color:#f59e0b;">'
         f'{latest}</span></div>',
         unsafe_allow_html=True,
@@ -126,9 +124,9 @@ if st.session_state.quantum_results:
     st.markdown(f"""
     <div class="cosmic-card" style="text-align:center; padding:0.8rem;">
       <span style="color:#a78bfa;">Results so far: </span>
-      <b style="color:#ffe066;">👑 {heads} heads</b>
+      {coin_html("H", 26)} <b style="color:#ffe066;">{heads} heads</b>
       <span style="color:#6b7280;"> · </span>
-      <b style="color:#7c3aed;">🪙 {tails} tails</b>
+      {coin_html("T", 26)} <b style="color:#a78bfa;">{tails} tails</b>
       <span style="color:#6b7280;"> out of {total} observations</span>
     </div>
     """, unsafe_allow_html=True)

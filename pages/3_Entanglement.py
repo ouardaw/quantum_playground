@@ -9,7 +9,7 @@ from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout, dark_bar_chart,
-    render_sidebar, mark_complete, next_module_button,
+    render_sidebar, mark_complete, next_module_button, coin_html,
 )
 
 st.set_page_config(page_title="Entanglement | Quantum Playground", page_icon="🔗", layout="centered", initial_sidebar_state="expanded")
@@ -99,7 +99,7 @@ if st.session_state.ent_results:
     latest = st.session_state.ent_results[-1]
     names = {"0": "Heads", "1": "Tails"}
     first, second = names[latest[0]], names[latest[1]]
-    coins = " ".join("👑" if b == "0" else "🪙" for b in latest)
+    coins = " ".join(coin_html(b, 72) for b in latest)
     st.markdown(
         f'<div class="result-display">{coins}<br>'
         f'<span style="font-family:\'Space Grotesk\',sans-serif; font-size:1.2rem; color:#f59e0b;">'

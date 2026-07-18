@@ -10,7 +10,7 @@ from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout, dark_bar_chart,
-    render_sidebar, mark_complete, next_module_button,
+    render_sidebar, mark_complete, next_module_button, coin_html,
 )
 
 st.set_page_config(page_title="Two Qubits | Quantum Playground", page_icon="🎲", layout="centered", initial_sidebar_state="expanded")
@@ -49,7 +49,7 @@ if st.button("🎲 Flip two normal coins"):
 
 if st.session_state.classical_two:
     bits = "".join(st.session_state.classical_two)
-    coins = " ".join("👑" if b == "0" else "🪙" for b in bits)
+    coins = " ".join(coin_html(b, 72) for b in bits)
     names = {"0": "Heads", "1": "Tails"}
     label = f"{names[bits[0]]} + {names[bits[1]]}"
     st.markdown(
@@ -155,7 +155,7 @@ with col2:
 if st.session_state.two_results:
     latest = st.session_state.two_results[-1]
     names = {"0": "Heads", "1": "Tails"}
-    coins = " ".join("👑" if b == "0" else "🪙" for b in latest)
+    coins = " ".join(coin_html(b, 72) for b in latest)
     label = f"{names[latest[0]]} + {names[latest[1]]}"
     st.markdown(
         f'<div class="result-display">{coins}<br>'

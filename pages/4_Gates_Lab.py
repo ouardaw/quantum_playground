@@ -10,7 +10,7 @@ from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout, dark_bar_chart,
-    render_sidebar, bloch_sphere_fig, bloch_2d_fig, mark_complete,
+    render_sidebar, bloch_sphere_fig, bloch_2d_fig, mark_complete, coin_html,
 )
 
 st.set_page_config(page_title="Gates Lab | Quantum Playground", page_icon="🎛️", layout="centered", initial_sidebar_state="expanded")
@@ -125,7 +125,7 @@ if st.session_state.lab_gates:
 else:
     st.markdown("""
     <div class="cosmic-card" style="text-align:center; padding:0.9rem; color:#a78bfa;">
-      Your circuit is empty. The qubit starts as <b style="color:#ffe066;">|0⟩ (heads 👑)</b>.
+      Your circuit is empty. The qubit starts as <b style="color:#ffe066;">|0⟩ (heads)</b>.
       Add a gate above to get started!
     </div>
     """, unsafe_allow_html=True)
@@ -167,9 +167,8 @@ with m2:
 
 if st.session_state.lab_results:
     latest = st.session_state.lab_results[-1]
-    emoji = "👑" if latest == "Heads" else "🪙"
     st.markdown(
-        f'<div class="result-display">{emoji}<br>'
+        f'<div class="result-display">{coin_html(latest, 84)}<br>'
         f'<span style="font-family:\'Space Grotesk\',sans-serif; font-size:1.8rem; color:#f59e0b;">'
         f'{latest}</span></div>',
         unsafe_allow_html=True,
@@ -178,9 +177,9 @@ if st.session_state.lab_results:
     tails = st.session_state.lab_results.count("Tails")
     st.markdown(f"""
     <div class="cosmic-card" style="text-align:center; padding:0.8rem;">
-      <b style="color:#ffe066;">👑 {heads}</b>
+      {coin_html("H", 26)} <b style="color:#ffe066;">{heads}</b>
       <span style="color:#6b7280;"> · </span>
-      <b style="color:#7c3aed;">🪙 {tails}</b>
+      {coin_html("T", 26)} <b style="color:#a78bfa;">{tails}</b>
       <span style="color:#6b7280;"> out of {heads + tails} measurements of this circuit</span>
     </div>
     """, unsafe_allow_html=True)

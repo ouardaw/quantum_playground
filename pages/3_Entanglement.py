@@ -8,6 +8,7 @@ import streamlit as st
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
+    show_fig,
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, mark_complete, next_module_button, coin_html,
     render_stepper,
@@ -64,7 +65,7 @@ st.code(
 )
 
 st.markdown('<div style="color:#a78bfa; font-size:0.95rem; margin-bottom:0.5em;">Look at what is possible now:</div>', unsafe_allow_html=True)
-st.pyplot(dark_bar_chart(ordered, "Entangled qubits: a Bell state"))
+show_fig(dark_bar_chart(ordered, "Entangled qubits: a Bell state"))
 
 callout(
     "<b style='color:#ffe066;'>Look closely.</b> Only <b>|00⟩</b> and <b>|11⟩</b> are possible, each at 50%. "

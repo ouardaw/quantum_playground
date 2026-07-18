@@ -9,6 +9,7 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
+    show_fig,
     inject_quantum_css, render_hero, callout,
     dark_bar_chart, render_sidebar, bloch_sphere_fig, bloch_2d_fig,
     mark_complete, next_module_button, coin_html, render_stepper,
@@ -79,7 +80,7 @@ st.code(
 )
 
 st.markdown('<div style="color:#a78bfa; font-size:0.95rem; margin-bottom:0.5em;">What is happening inside the qubit right now:</div>', unsafe_allow_html=True)
-st.pyplot(dark_bar_chart(probs, "Quantum coin in superposition"))
+show_fig(dark_bar_chart(probs, "Quantum coin in superposition"))
 
 callout(
     "<b style='color:#ffe066;'>Wait, what?</b> The qubit is sitting at "
@@ -168,7 +169,7 @@ with st.expander("🧠 Want to go a little deeper? (The Bloch sphere)", expanded
 
     use_2d = st.toggle("Sphere not showing? Switch to the 2D view", key="bloch_2d_m1")
     if use_2d:
-        st.pyplot(bloch_2d_fig(sv_tilt, title=f"θ = {theta_deg}°: the arrow IS the qubit"))
+        show_fig(bloch_2d_fig(sv_tilt, title=f"θ = {theta_deg}°: the arrow IS the qubit"))
         st.markdown(
             '<div style="color:#6b7280; font-size:0.82rem; text-align:center;">'
             'Nothing is hidden in this flat view: the gates in this app always keep '

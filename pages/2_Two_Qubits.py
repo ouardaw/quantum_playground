@@ -9,6 +9,7 @@ import random
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
+    show_fig,
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, mark_complete, next_module_button, coin_html,
     render_stepper,
@@ -89,7 +90,7 @@ st.code(
 )
 
 st.markdown('<div style="color:#a78bfa; font-size:0.95rem; margin-bottom:0.5em;">What is happening inside the two qubits right now:</div>', unsafe_allow_html=True)
-st.pyplot(dark_bar_chart(ordered, "Two qubits in superposition"))
+show_fig(dark_bar_chart(ordered, "Two qubits in superposition"))
 
 callout(
     "<b style='color:#ffe066;'>Whoa.</b> All four states (00, 01, 10, 11) exist at the same time, "

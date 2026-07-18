@@ -9,6 +9,7 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
+    show_fig,
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, bloch_sphere_fig, bloch_2d_fig, mark_complete, coin_html,
     render_stepper,
@@ -136,7 +137,7 @@ else:
 # ── Live state: sphere + probabilities ─────────────────────────────────────────
 use_2d = st.toggle("Sphere not showing? Switch to the 2D view", key="bloch_2d_lab")
 if use_2d:
-    st.pyplot(bloch_2d_fig(sv, title="Live Bloch view: the arrow IS your qubit"))
+    show_fig(bloch_2d_fig(sv, title="Live Bloch view: the arrow IS your qubit"))
     st.markdown(
         '<div style="color:#6b7280; font-size:0.82rem; text-align:center;">'
         'Nothing is hidden in this flat view: X, H, Z, and RY always keep '
@@ -150,7 +151,7 @@ else:
         config={"displayModeBar": False},
     )
 
-st.pyplot(dark_bar_chart({"Heads": p_heads, "Tails": p_tails}, "Measurement chances right now"))
+show_fig(dark_bar_chart({"Heads": p_heads, "Tails": p_tails}, "Measurement chances right now"))
 
 # ── Measure ────────────────────────────────────────────────────────────────────
 st.markdown('<div class="cosmic-section">🔮 Measure it!</div>', unsafe_allow_html=True)

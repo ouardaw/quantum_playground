@@ -31,6 +31,7 @@ def inject_quantum_css():
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=Orbitron:wght@700&display=swap');
 
     /* ── Global base ──────────────────────────────────────────────── */
+    html { font-size: 17.5px !important; }
     html, body, [class*="css"] {
         font-family: 'Space Grotesk', sans-serif !important;
         color: #f8fafc !important;
@@ -55,11 +56,11 @@ def inject_quantum_css():
     /* ── Sidebar navigation: quiet ghost buttons by default ─────── */
     section[data-testid="stSidebar"] button {
         background: rgba(26,26,46,0.55) !important;
-        color: #a78bfa !important;
+        color: #d4c5f9 !important;
         font-family: 'Orbitron', sans-serif !important;
-        border: 1.5px solid rgba(124,58,237,0.40) !important;
+        border: 1.5px solid rgba(124,58,237,0.50) !important;
         border-radius: 16px !important;
-        font-size: 0.92rem !important;
+        font-size: 1.02rem !important;
         margin-bottom: 0.55em !important;
         font-weight: 700 !important;
         letter-spacing: 0.07em !important;
@@ -91,6 +92,7 @@ def inject_quantum_css():
         font-family: 'Orbitron', sans-serif !important;
         border: none !important;
         border-radius: 14px !important;
+        font-size: 1.02rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.07em !important;
         padding: 0.75em 1.5em !important;
@@ -445,8 +447,11 @@ def render_sidebar(active: str = "home"):
         trophy = " 🏆" if done == total else ""
         st.markdown(f"""
         <div style="margin-top:0.9em;">
-          <div style="font-family:'Orbitron',sans-serif; color:#a78bfa; font-size:0.72rem;
-                      letter-spacing:0.14em; text-align:center; margin-bottom:0.35em;">
+          <div style="font-family:'Orbitron',sans-serif; font-size:0.8rem;
+                      letter-spacing:0.14em; text-align:center; margin-bottom:0.35em;
+                      background: linear-gradient(90deg, #ffe066 0%, #f59e0b 50%, #a78bfa 100%);
+                      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                      background-clip: text;">
             MISSION PROGRESS: {done}/{total}{trophy}
           </div>
           <div style="background:rgba(124,58,237,0.18); border-radius:10px; height:13px;
@@ -473,7 +478,7 @@ def render_stepper(active: str):
             rules.append(f"""
             {sel} {{
                 {AMBER_SOLID}
-                font-size: 0.68rem !important;
+                font-size: 0.76rem !important;
                 padding: 0.55em 0.2em !important;
                 border-radius: 10px !important;
                 letter-spacing: 0.04em !important;
@@ -485,7 +490,7 @@ def render_stepper(active: str):
                 color: #7ee2b0 !important;
                 border: 1px solid rgba(126,226,176,0.45) !important;
                 box-shadow: none !important;
-                font-size: 0.68rem !important;
+                font-size: 0.76rem !important;
                 padding: 0.55em 0.2em !important;
                 border-radius: 10px !important;
                 letter-spacing: 0.04em !important;
@@ -501,10 +506,10 @@ def render_stepper(active: str):
             rules.append(f"""
             {sel} {{
                 background: rgba(34,42,82,0.55) !important;
-                color: #8b93b8 !important;
+                color: #aab3d8 !important;
                 border: 1px solid rgba(124,58,237,0.30) !important;
                 box-shadow: none !important;
-                font-size: 0.68rem !important;
+                font-size: 0.76rem !important;
                 padding: 0.55em 0.2em !important;
                 border-radius: 10px !important;
                 letter-spacing: 0.04em !important;
@@ -540,6 +545,30 @@ def render_hero(title: str, subtitle: str):
       </div>
     </div>
     """, unsafe_allow_html=True)
+
+
+# ── Ket notation explainer (shared by modules that show |0⟩ states) ───────────
+def ket_explainer():
+    with st.expander("🔤 What do those |00⟩ brackets mean?"):
+        st.markdown("""
+        <div style="color:#d4c5f9;">
+        Those angle brackets are called <b style="color:#ffe066;">ket notation</b>, and they are
+        how real physicists write quantum states. The notation was invented by
+        <b style="color:#a78bfa;">Paul Dirac</b>, one of the founders of quantum mechanics.<br><br>
+        • <b>|0⟩</b> means "the qubit is heads" and <b>|1⟩</b> means "the qubit is tails"<br>
+        • With two qubits, each digit is one coin: <b>|10⟩</b> means one came out tails
+        and the other heads<br>
+        • So <b>|00⟩: 3</b> in your tally means "both heads happened 3 times"<br><br>
+        And here is the secret behind the secret: every ket is just
+        <b style="color:#f59e0b;">math you can learn</b>. A qubit's state is really a short
+        list of numbers called <b>amplitudes</b>, and every gate is a small grid of numbers
+        called a <b>matrix</b>. The subject that covers them is called
+        <b style="color:#ffe066;">linear algebra</b> (vectors and matrices), and once you know
+        the basics, you can calculate everything this app shows you with pen and paper.<br><br>
+        Congratulations: you can now read the same notation used in actual research papers.
+        This is not a toy version. It is the real thing.
+        </div>
+        """, unsafe_allow_html=True)
 
 
 # ── Chart renderer (closes figures to prevent memory leaks on the server) ─────

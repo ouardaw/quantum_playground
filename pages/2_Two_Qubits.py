@@ -11,17 +11,20 @@ from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, mark_complete, next_module_button, coin_html,
+    render_stepper,
 )
 
 st.set_page_config(page_title="Two Qubits | Quantum Playground", page_icon="🎲", layout="centered", initial_sidebar_state="expanded")
 inject_quantum_css()
 render_sidebar("two_qubits")
 
+
 # ── Hero ───────────────────────────────────────────────────────────────────────
 render_hero(
     title="🎲 MODULE 2: TWO QUBITS",
     subtitle="When superposition starts to multiply",
 )
+render_stepper("two_qubits")
 
 # ── Recap ──────────────────────────────────────────────────────────────────────
 callout(

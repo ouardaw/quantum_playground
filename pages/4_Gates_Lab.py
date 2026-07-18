@@ -11,11 +11,13 @@ from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, bloch_sphere_fig, bloch_2d_fig, mark_complete, coin_html,
+    render_stepper,
 )
 
 st.set_page_config(page_title="Gates Lab | Quantum Playground", page_icon="🎛️", layout="centered", initial_sidebar_state="expanded")
 inject_quantum_css()
 render_sidebar("gates_lab")
+
 
 MAX_GATES = 8
 
@@ -24,6 +26,7 @@ render_hero(
     title="🎛️ MODULE 4: GATES LAB",
     subtitle="Take the controls: build your own quantum circuit",
 )
+render_stepper("gates_lab")
 
 # ── Intro ──────────────────────────────────────────────────────────────────────
 st.markdown("""

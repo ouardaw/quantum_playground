@@ -10,17 +10,20 @@ from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, mark_complete, next_module_button, coin_html,
+    render_stepper,
 )
 
 st.set_page_config(page_title="Entanglement | Quantum Playground", page_icon="🔗", layout="centered", initial_sidebar_state="expanded")
 inject_quantum_css()
 render_sidebar("entanglement")
 
+
 # ── Hero ───────────────────────────────────────────────────────────────────────
 render_hero(
     title="🔗 MODULE 3: ENTANGLEMENT",
     subtitle="The spookiest thing in all of physics",
 )
+render_stepper("entanglement")
 
 # ── Recap ──────────────────────────────────────────────────────────────────────
 callout(

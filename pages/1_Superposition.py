@@ -11,18 +11,20 @@ from qiskit.quantum_info import Statevector
 from quantum_style import (
     inject_quantum_css, render_hero, callout,
     dark_bar_chart, render_sidebar, bloch_sphere_fig, bloch_2d_fig,
-    mark_complete, next_module_button, coin_html,
+    mark_complete, next_module_button, coin_html, render_stepper,
 )
 
 st.set_page_config(page_title="Superposition | Quantum Playground", page_icon="🪙", layout="centered", initial_sidebar_state="expanded")
 inject_quantum_css()
 render_sidebar("superposition")
 
+
 # ── Hero ───────────────────────────────────────────────────────────────────────
 render_hero(
     title="🪙 MODULE 1: SUPERPOSITION",
     subtitle="The Quantum Coin",
 )
+render_stepper("superposition")
 
 # ── Part 1: Classical coin ─────────────────────────────────────────────────────
 st.markdown('<div class="cosmic-section">🪙 First, a normal coin</div>', unsafe_allow_html=True)

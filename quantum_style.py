@@ -542,6 +542,15 @@ def render_hero(title: str, subtitle: str):
     """, unsafe_allow_html=True)
 
 
+# ── Chart renderer (closes figures to prevent memory leaks on the server) ─────
+def show_fig(fig):
+    """Render a Matplotlib figure and immediately free its memory.
+    Without plt.close, every rerun leaks a figure and the Streamlit Cloud
+    container eventually runs out of memory and dies."""
+    st.pyplot(fig)
+    plt.close(fig)
+
+
 # ── Quantum coin icon ──────────────────────────────────────────────────────────
 def coin_html(side, size: int = 64) -> str:
     """

@@ -340,6 +340,30 @@ def inject_quantum_css():
         background: rgba(15,15,35,0.85) !important;
     }
 
+    /* ── Quantum coins: silver H / dark purple T ──────────────────── */
+    .qcoin {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+        vertical-align: middle;
+        line-height: 1;
+    }
+    .qcoin-h {
+        background: #d6d9e0;
+        border: 3px solid #f0f2f5;
+        box-shadow: inset 0 0 0 4px #b8bcc6, 0 0 18px rgba(214,217,224,0.35);
+        color: #26215c;
+    }
+    .qcoin-t {
+        background: #26215c;
+        border: 3px solid #534ab7;
+        box-shadow: inset 0 0 0 4px #3c3489, 0 0 18px rgba(124,58,237,0.45);
+        color: #cecbf6;
+    }
+
     /* ── Orb blobs for hero ───────────────────────────────────────── */
     .orb { position:absolute; border-radius:50%; filter:blur(38px); opacity:0.55; pointer-events:none; }
     .orb1 { width:80px; height:80px; background:radial-gradient(circle,#ffb800,transparent); top:10%; left:8%; animation:orbFloat1 15s ease-in-out infinite; }
@@ -458,6 +482,20 @@ def render_hero(title: str, subtitle: str):
     """, unsafe_allow_html=True)
 
 
+# ── Quantum coin icon ──────────────────────────────────────────────────────────
+def coin_html(side, size: int = 64) -> str:
+    """
+    Inline HTML for a coin icon. side: 'Heads'/'H'/'0' or 'Tails'/'T'/'1'.
+    Silver coin with H for heads, dark purple coin with T for tails.
+    """
+    is_heads = str(side)[0] in ("H", "h", "0")
+    letter, cls = ("H", "qcoin-h") if is_heads else ("T", "qcoin-t")
+    return (
+        f'<span class="qcoin {cls}" style="width:{size}px;height:{size}px;'
+        f'font-size:{int(size * 0.42)}px;">{letter}</span>'
+    )
+
+
 # ── Helpers ────────────────────────────────────────────────────────────────────
 def cosmic_card(html_body: str):
     st.markdown(f'<div class="cosmic-card">{html_body}</div>', unsafe_allow_html=True)
@@ -529,7 +567,7 @@ def bloch_sphere_fig(statevector, title="Your qubit on the Bloch sphere"):
     fig.add_scatter3d(
         x=[0, 0, 1.25], y=[0, 0, 0], z=[1.3, -1.3, 0],
         mode="text",
-        text=["|0⟩  👑 Heads", "|1⟩  🪙 Tails", "superposition"],
+        text=["|0⟩  Heads", "|1⟩  Tails", "superposition"],
         textfont=dict(size=13, color=[GOLD2, MUTED, GOLD]),
         hoverinfo="skip", showlegend=False,
     )

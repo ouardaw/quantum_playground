@@ -8,7 +8,7 @@ import streamlit as st
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
-    show_fig,
+    show_fig, ket_explainer,
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, mark_complete, next_module_button, coin_html,
     render_stepper,
@@ -158,6 +158,7 @@ for col, icon, title, desc in [
 
 # ── Going deeper ───────────────────────────────────────────────────────────────
 st.write("")
+ket_explainer()
 with st.expander("💻 Show me the full code"):
     st.code(
         """from qiskit import QuantumCircuit

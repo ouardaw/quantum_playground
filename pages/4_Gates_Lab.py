@@ -9,7 +9,7 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from quantum_style import (
-    show_fig,
+    show_fig, ket_explainer,
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, bloch_sphere_fig, bloch_2d_fig, mark_complete, coin_html,
     render_stepper,
@@ -207,6 +207,8 @@ for col, icon, name, desc in [
           <div style="color:#d4c5f9; font-size:0.88rem;">{desc}</div>
         </div>
         """, unsafe_allow_html=True)
+
+ket_explainer()
 
 # ── Challenges ─────────────────────────────────────────────────────────────────
 st.markdown('<div class="cosmic-section">🏆 Lab challenges</div>', unsafe_allow_html=True)

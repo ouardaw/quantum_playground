@@ -52,25 +52,21 @@ def inject_quantum_css():
         border-right: 1px solid rgba(124,58,237,0.30) !important;
     }
 
-    /* ── Sidebar navigation buttons, amber/orange 3-D (Stellaris style) */
+    /* ── Sidebar navigation: quiet ghost buttons by default ─────── */
     section[data-testid="stSidebar"] button {
-        background: linear-gradient(135deg, #f59e0b 0%, #fb923c 50%, #ea580c 100%) !important;
-        color: #fff !important;
+        background: rgba(26,26,46,0.55) !important;
+        color: #a78bfa !important;
         font-family: 'Orbitron', sans-serif !important;
-        border: none !important;
+        border: 1.5px solid rgba(124,58,237,0.40) !important;
         border-radius: 16px !important;
-        font-size: 1rem !important;
-        margin-bottom: 0.65em !important;
+        font-size: 0.92rem !important;
+        margin-bottom: 0.55em !important;
         font-weight: 700 !important;
-        letter-spacing: 0.08em !important;
-        padding: 1em 0.5em !important;
-        box-shadow:
-            0 7px 0 #dc2626,
-            0 7px 1px #b91c1c,
-            0 10px 12px rgba(0,0,0,0.40),
-            0 0 18px rgba(251,146,60,0.30) !important;
+        letter-spacing: 0.07em !important;
+        padding: 0.8em 0.5em !important;
+        box-shadow: none !important;
         transform: translateY(0) !important;
-        transition: all 0.15s ease !important;
+        transition: all 0.18s ease !important;
         text-transform: uppercase !important;
         position: relative !important;
         white-space: nowrap !important;
@@ -79,31 +75,13 @@ def inject_quantum_css():
         width: 100% !important;
     }
     section[data-testid="stSidebar"] button:hover {
-        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fb923c 100%) !important;
-        transform: translateY(3px) !important;
-        box-shadow:
-            0 4px 0 #dc2626,
-            0 4px 1px #b91c1c,
-            0 7px 10px rgba(0,0,0,0.40),
-            0 0 26px rgba(251,146,60,0.55) !important;
+        border-color: rgba(245,158,11,0.75) !important;
+        color: #ffe066 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 0 14px rgba(245,158,11,0.25) !important;
     }
     section[data-testid="stSidebar"] button:active {
-        background: linear-gradient(135deg, #ea580c 0%, #dc2626 50%, #b91c1c 100%) !important;
-        transform: translateY(6px) !important;
-        box-shadow:
-            0 1px 0 #991b1b,
-            0 2px 4px rgba(0,0,0,0.40),
-            inset 0 2px 5px rgba(0,0,0,0.20) !important;
-    }
-    /* Shine on sidebar buttons */
-    section[data-testid="stSidebar"] button::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 46%;
-        background: linear-gradient(to bottom, rgba(255,255,255,0.28), rgba(255,255,255,0.05));
-        border-radius: 16px 16px 0 0;
-        pointer-events: none;
+        transform: translateY(1px) !important;
     }
 
     /* ── Page-body buttons, purple/blue 3-D ───────────────────── */
@@ -155,9 +133,9 @@ def inject_quantum_css():
             rgba(15,15,35,0.85) 50%,
             rgba(58,134,255,0.18) 100%);
         border: 1.5px solid rgba(255,255,255,0.12);
-        border-radius: 28px;
-        padding: 2rem 1.5rem 1.6rem 1.5rem;
-        margin: 0.4rem auto 1.4rem auto;
+        border-radius: 22px;
+        padding: 1.2rem 1.2rem 1rem 1.2rem;
+        margin: 0.3rem auto 1.1rem auto;
         text-align: center;
         box-shadow:
             0 8px 32px rgba(124,58,237,0.4),
@@ -175,7 +153,7 @@ def inject_quantum_css():
     /* ── Typography ───────────────────────────────────────────────── */
     .cosmic-title {
         font-family: 'Orbitron', sans-serif !important;
-        font-size: clamp(1.8rem, 4.5vw, 2.7rem);
+        font-size: clamp(1.4rem, 3.4vw, 2rem);
         letter-spacing: 0.16em;
         text-align: center;
         background: linear-gradient(90deg, #ffe066 0%, #7c3aed 55%, #3a86ff 100%);
@@ -187,7 +165,7 @@ def inject_quantum_css():
     }
     .cosmic-subtitle {
         font-family: 'Space Grotesk', sans-serif;
-        font-size: clamp(0.85rem, 2vw, 1.05rem);
+        font-size: clamp(0.72rem, 1.6vw, 0.9rem);
         letter-spacing: 0.25em;
         text-transform: uppercase;
         color: #a78bfa;
@@ -376,8 +354,24 @@ def inject_quantum_css():
     """, unsafe_allow_html=True)
 
 
-# ── Progress tracking ──────────────────────────────────────────────────────────
-MODULE_KEYS = ["superposition", "two_qubits", "entanglement", "gates_lab"]
+# ── Module registry (single source of truth for nav, stepper, mission map) ────
+MODULES = [
+    ("superposition", "🪙", "SUPERPOSITION", "The quantum coin",       "pages/1_Superposition.py"),
+    ("two_qubits",    "🎲", "TWO QUBITS",    "Possibilities multiply", "pages/2_Two_Qubits.py"),
+    ("entanglement",  "🔗", "ENTANGLEMENT",  "Spooky action",          "pages/3_Entanglement.py"),
+    ("gates_lab",     "🎛️", "GATES LAB",     "Build your own circuits","pages/4_Gates_Lab.py"),
+]
+MODULE_KEYS = [m[0] for m in MODULES]
+
+AMBER_SOLID = """
+    background: linear-gradient(135deg, #f59e0b 0%, #fb923c 55%, #ea580c 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow:
+        0 5px 0 #dc2626,
+        0 7px 10px rgba(0,0,0,0.40),
+        0 0 18px rgba(251,146,60,0.35) !important;
+"""
 
 
 def mark_complete(module_key: str):
@@ -403,44 +397,44 @@ def render_sidebar(active: str = "home"):
     completed = st.session_state.setdefault("completed", set())
 
     with st.sidebar:
-        # ── Info card (mirrors "Stargazer!" in Stellaris) ─────────
+        # ── Compact wordmark ──────────────────────────────────────
         st.markdown("""
-        <div style="
-            background: linear-gradient(135deg, rgba(124,58,237,0.35), rgba(245,158,11,0.25));
-            border: 1.5px solid rgba(255,255,255,0.14);
-            border-radius: 18px;
-            padding: 1rem 0.9rem 0.85rem 0.9rem;
-            margin-bottom: 1.1em;
-            box-shadow: 0 4px 24px rgba(124,58,237,0.30), 0 0 12px rgba(245,158,11,0.15);
-            text-align: center;
-        ">
-          <div style="font-size:2rem; margin-bottom:0.15em;">⚛️</div>
-          <div style="font-family:'Orbitron',sans-serif; font-size:1.05rem;
-                      font-weight:700; letter-spacing:0.12em; color:#f59e0b;
-                      margin-bottom:0.4em;">QUANTUM EXPLORER</div>
-          <div style="font-size:0.82rem; color:#d4c5f9; line-height:1.45;">
-            Explore superposition, entanglement &amp; real Qiskit circuits.
-            Choose a module to begin your quantum journey! 🚀
+        <div style="text-align:center; margin: 0.2em 0 0.9em 0;">
+          <div style="font-size:1.7rem; margin-bottom:0.1em;">⚛️</div>
+          <div style="font-family:'Orbitron',sans-serif; font-size:0.98rem;
+                      font-weight:700; letter-spacing:0.16em; line-height:1.5;
+                      background: linear-gradient(90deg, #ffe066 0%, #f59e0b 50%, #a78bfa 100%);
+                      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                      background-clip: text;">
+            QUANTUM<br>PLAYGROUND
           </div>
         </div>
+        <div style="border-top:1px solid rgba(124,58,237,0.30); margin:0 0 0.9em 0;"></div>
         """, unsafe_allow_html=True)
 
-        st.markdown(
-            "<div style='border-top:1px solid rgba(124,58,237,0.30); margin:0.4em 0 0.9em 0;'></div>",
-            unsafe_allow_html=True,
-        )
+        # ── Active page gets the full amber 3-D treatment ─────────
+        st.markdown(f"""
+        <style>
+        section[data-testid="stSidebar"] .st-key-nav_{active} button {{
+            {AMBER_SOLID}
+        }}
+        section[data-testid="stSidebar"] .st-key-nav_{active} button:hover {{
+            color: #fff !important;
+            transform: translateY(2px) !important;
+            box-shadow:
+                0 3px 0 #dc2626,
+                0 5px 8px rgba(0,0,0,0.40),
+                0 0 24px rgba(251,146,60,0.55) !important;
+        }}
+        </style>
+        """, unsafe_allow_html=True)
 
         # ── Navigation buttons (✅ = module completed) ─────────────
-        pages = [
-            ("🌌", "HOME",          "home",          "Home.py",                   None),
-            ("🪙", "SUPERPOSITION", "superposition", "pages/1_Superposition.py",  "superposition"),
-            ("🎲", "TWO QUBITS",    "two_qubits",    "pages/2_Two_Qubits.py",     "two_qubits"),
-            ("🔗", "ENTANGLEMENT",  "entanglement",  "pages/3_Entanglement.py",   "entanglement"),
-            ("🎛️", "GATES LAB",     "gates_lab",     "pages/4_Gates_Lab.py",      "gates_lab"),
+        pages = [("home", "🌌", "HOME", "", "Home.py")] + [
+            (key, icon, label, sub, path) for key, icon, label, sub, path in MODULES
         ]
-
-        for icon, label, key, path, ckey in pages:
-            check = "  ✅" if ckey and ckey in completed else ""
+        for key, icon, label, _sub, path in pages:
+            check = "  ✅" if key in completed else ""
             if st.button(f"{icon}  {label}{check}", key=f"nav_{key}", use_container_width=True):
                 st.switch_page(path)
 
@@ -465,6 +459,72 @@ def render_sidebar(active: str = "home"):
           </div>
         </div>
         """, unsafe_allow_html=True)
+
+
+# ── Mission stepper (top of every module page; mobile-friendly nav) ────────────
+def render_stepper(active: str):
+    """Horizontal 1-2-3-4 progress chips. Click any chip to jump to that module."""
+    completed = st.session_state.setdefault("completed", set())
+
+    rules = []
+    for key, _icon, _label, _sub, _path in MODULES:
+        sel = f".st-key-step_{key} button"
+        if key == active:
+            rules.append(f"""
+            {sel} {{
+                {AMBER_SOLID}
+                font-size: 0.68rem !important;
+                padding: 0.55em 0.2em !important;
+                border-radius: 10px !important;
+                letter-spacing: 0.04em !important;
+            }}""")
+        elif key in completed:
+            rules.append(f"""
+            {sel} {{
+                background: rgba(29,158,117,0.14) !important;
+                color: #7ee2b0 !important;
+                border: 1px solid rgba(126,226,176,0.45) !important;
+                box-shadow: none !important;
+                font-size: 0.68rem !important;
+                padding: 0.55em 0.2em !important;
+                border-radius: 10px !important;
+                letter-spacing: 0.04em !important;
+            }}
+            {sel}:hover {{
+                background: rgba(29,158,117,0.25) !important;
+                color: #7ee2b0 !important;
+                border-color: rgba(126,226,176,0.9) !important;
+                box-shadow: none !important;
+                transform: translateY(-1px) !important;
+            }}""")
+        else:
+            rules.append(f"""
+            {sel} {{
+                background: rgba(34,42,82,0.55) !important;
+                color: #8b93b8 !important;
+                border: 1px solid rgba(124,58,237,0.30) !important;
+                box-shadow: none !important;
+                font-size: 0.68rem !important;
+                padding: 0.55em 0.2em !important;
+                border-radius: 10px !important;
+                letter-spacing: 0.04em !important;
+            }}
+            {sel}:hover {{
+                background: rgba(34,42,82,0.85) !important;
+                color: #ffe066 !important;
+                border-color: rgba(245,158,11,0.7) !important;
+                box-shadow: none !important;
+                transform: translateY(-1px) !important;
+            }}""")
+
+    st.markdown(f"<style>{''.join(rules)}</style>", unsafe_allow_html=True)
+
+    cols = st.columns(4)
+    for col, (i, (key, _icon, label, _sub, path)) in zip(cols, enumerate(MODULES, 1)):
+        prefix = "✓ " if key in completed and key != active else f"{i} · "
+        with col:
+            if st.button(f"{prefix}{label}", key=f"step_{key}", use_container_width=True):
+                st.switch_page(path)
 
 
 # ── Hero banner ────────────────────────────────────────────────────────────────

@@ -43,7 +43,7 @@ A CNOT looks at the first qubit and flips the second one <b>only if the first is
 Do that while the first qubit is still in superposition, and something remarkable happens:
 the "flip" and the "don't flip" both occur at once, tying the two qubits together.<br><br>
 Now the two qubits are <b style="color:#f59e0b;">entangled</b>. They are no longer two
-separate coins. They are one linked system with a shared fate.
+separate coins. They are now part of the same quantum system, linked in a way that classical objects can never be.
 </div>
 """, unsafe_allow_html=True)
 
@@ -68,7 +68,7 @@ show_fig(dark_bar_chart(ordered, "Entangled qubits: a Bell state"))
 callout(
     "<b style='color:#ffe066;'>Look closely.</b> Only <b>|00⟩</b> and <b>|11⟩</b> are possible, each at 50%. "
     "The states 01 and 10 are simply <b style='color:#f59e0b;'>gone</b>. The two qubits will always come "
-    "out matching: either both heads, or both tails. Never one of each."
+    "out matching: either both heads, or both tails. Never one of each. The Bell state is one of the simplest and most famous examples of entanglement, but it’s only one of many possible entangled states."
 )
 
 # ── Part 2: Observe ────────────────────────────────────────────────────────────

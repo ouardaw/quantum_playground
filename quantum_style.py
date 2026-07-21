@@ -15,12 +15,19 @@ matplotlib.use("Agg")          # headless, no GUI backend on the server
 from matplotlib.figure import Figure  # thread-safe OO API (pyplot globals are not)
 
 
-@lru_cache(maxsize=16)
+@lru_cache(maxsize=64)
 def img_b64(rel_path: str) -> str:
-    """Return a data-URI for an image in the project, cached per process."""
-    p = Path(__file__).parent / rel_path
-    mime = "jpeg" if p.suffix.lower() in (".jpg", ".jpeg") else p.suffix.lstrip(".").lower()
-    return f"data:image/{mime};base64," + base64.b64encode(p.read_bytes()).decode()
+    """Return a URL for an image served from Streamlit's static/ folder.
+
+    This used to return a data: URI, which re-sent the whole image inline on
+    EVERY rerun (~400KB per click on Home). Rapid clicking then flooded the
+    websocket and could take the server down. Static serving lets the browser
+    cache each file once. Name kept for call-site compatibility.
+    """
+    name = Path(rel_path).name
+    if not (Path(__file__).parent / "static" / name).exists():
+        raise FileNotFoundError(f"static/{name}")
+    return f"app/static/{name}"
 
 
 # ── colour palette ─────────────────────────────────────────────────────────────

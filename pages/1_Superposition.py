@@ -13,22 +13,21 @@ from quantum_style import (
     inject_quantum_css, render_hero, callout,
     dark_bar_chart, render_sidebar, bloch_sphere_fig, bloch_2d_fig,
     mark_complete, next_module_button, coin_html, render_stepper,
+    render_hero_img,
 )
 
-st.set_page_config(page_title="Superposition | Quantum Playground", page_icon="🪙", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Superposition | Quantum Playground", page_icon="🪙", layout="centered", initial_sidebar_state="auto")
 inject_quantum_css()
 render_sidebar("superposition")
 
 
 # ── Hero ───────────────────────────────────────────────────────────────────────
-render_hero(
-    title="🪙 MODULE 1: SUPERPOSITION",
-    subtitle="The Quantum Coin",
-)
+render_hero_img("assets/hero_superposition.jpg",
+                "Mission 1: Superposition. The quantum coin.")
 render_stepper("superposition")
 
 # ── Part 1: Classical coin ─────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🪙 First, a normal coin</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">First, a normal coin</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -53,7 +52,7 @@ if st.session_state.classical_flip:
     )
 
 # ── Part 2: Quantum coin ───────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">⚛️ Now, the quantum coin</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Now, the quantum coin</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -71,7 +70,7 @@ qc.h(0)
 sv = Statevector(qc)
 probs = {"Heads": sv.probabilities()[0], "Tails": sv.probabilities()[1]}
 
-st.markdown('<div class="cosmic-section" style="font-size:1.1rem;">🔧 The real quantum circuit</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section" style="font-size:1.1rem;">The real quantum circuit</div>', unsafe_allow_html=True)
 st.code(
     "from qiskit import QuantumCircuit\n\n"
     "qc = QuantumCircuit(1)\n"
@@ -89,7 +88,7 @@ callout(
 )
 
 # ── Part 3: Observe ────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🔮 So what happens when we look?</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">So what happens when we look?</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -128,9 +127,9 @@ if st.session_state.quantum_results:
     <div class="cosmic-card" style="text-align:center; padding:0.8rem;">
       <span style="color:#a78bfa;">Results so far: </span>
       {coin_html("H", 26)} <b style="color:#ffe066;">{heads} heads</b>
-      <span style="color:#6b7280;"> · </span>
+      <span style="color:#9ca3af;"> · </span>
       {coin_html("T", 26)} <b style="color:#a78bfa;">{tails} tails</b>
-      <span style="color:#6b7280;"> out of {total} observations</span>
+      <span style="color:#9ca3af;"> out of {total} observations</span>
     </div>
     """, unsafe_allow_html=True)
     if total >= 10:
@@ -153,7 +152,7 @@ with st.expander("🧠 Want to go a little deeper? (The Bloch sphere)", expanded
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="cosmic-section" style="font-size:1.05rem;">🕹️ Try it yourself: tilt the qubit!</div>', unsafe_allow_html=True)
+    st.markdown('<div class="cosmic-section" style="font-size:1.05rem;">Try it yourself: tilt the qubit!</div>', unsafe_allow_html=True)
     st.markdown("""
     <div style="color:#d4c5f9; font-size:0.95rem; margin-bottom:0.4em;">
     Drag the slider to rotate the qubit's arrow from heads (0°) to tails (180°).
@@ -171,7 +170,7 @@ with st.expander("🧠 Want to go a little deeper? (The Bloch sphere)", expanded
     if use_2d:
         show_fig(bloch_2d_fig(sv_tilt, title=f"θ = {theta_deg}°: the arrow IS the qubit"))
         st.markdown(
-            '<div style="color:#6b7280; font-size:0.82rem; text-align:center;">'
+            '<div style="color:#9ca3af; font-size:0.82rem; text-align:center;">'
             'Nothing is hidden in this flat view: the gates in this app always keep '
             'the arrow in this slice of the sphere.</div>',
             unsafe_allow_html=True,
@@ -186,7 +185,7 @@ with st.expander("🧠 Want to go a little deeper? (The Bloch sphere)", expanded
     st.markdown(f"""
     <div class="cosmic-card" style="text-align:center; padding:0.8rem;">
       <span style="color:#ffe066; font-size:1.1rem;">👑 Heads: <b>{p_heads*100:.0f}%</b></span>
-      <span style="color:#6b7280;"> · </span>
+      <span style="color:#9ca3af;"> · </span>
       <span style="color:#a78bfa; font-size:1.1rem;">🪙 Tails: <b>{p_tails*100:.0f}%</b></span>
     </div>
     """, unsafe_allow_html=True)
@@ -247,4 +246,4 @@ st.markdown("""
 """, unsafe_allow_html=True)
 st.write("")
 next_module_button("MODULE 2: TWO QUBITS 🎲", "pages/2_Two_Qubits.py", "next_two_qubits")
-st.page_link("Home.py", label="← Back to Home")
+st.page_link("Home.py", label="🚀 Return to Mission Control")

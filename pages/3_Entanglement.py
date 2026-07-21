@@ -11,19 +11,17 @@ from quantum_style import (
     show_fig, ket_explainer,
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, mark_complete, next_module_button, coin_html,
-    render_stepper,
+    render_stepper, render_hero_img, img_b64,
 )
 
-st.set_page_config(page_title="Entanglement | Quantum Playground", page_icon="🔗", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Entanglement | Quantum Playground", page_icon="🔗", layout="centered", initial_sidebar_state="auto")
 inject_quantum_css()
 render_sidebar("entanglement")
 
 
 # ── Hero ───────────────────────────────────────────────────────────────────────
-render_hero(
-    title="🔗 MODULE 3: ENTANGLEMENT",
-    subtitle="The spookiest thing in all of physics",
-)
+render_hero_img("assets/hero_entanglement.jpg",
+                "Mission 3: Entanglement. The spookiest thing in physics.")
 render_stepper("entanglement")
 
 # ── Recap ──────────────────────────────────────────────────────────────────────
@@ -34,7 +32,7 @@ callout(
 )
 
 # ── Part 1: The setup ──────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🔧 Linking two qubits</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Linking two qubits</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -74,7 +72,7 @@ callout(
 )
 
 # ── Part 2: Observe ────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🔮 Now measure just ONE of them</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Now measure just ONE of them</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -128,7 +126,7 @@ if st.session_state.ent_results:
         )
 
 # ── Part 3: Why it matters ─────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🌌 Why this matters</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Why this matters</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -148,11 +146,12 @@ for col, icon, title, desc in [
 ]:
     with col:
         st.markdown(f"""
-        <div class="cosmic-card" style="text-align:center; padding:0.9rem; margin-bottom:0.5rem;">
-          <div style="font-size:1.8rem;">{icon}</div>
+        <div class="cosmic-card" style="text-align:center; padding:0.9rem; margin-bottom:0.5rem;
+                    min-height:190px; display:flex; flex-direction:column; justify-content:flex-start;">
           <div style="font-family:'Orbitron',sans-serif; font-size:0.8rem; color:#f59e0b;
-                      margin:0.3em 0; letter-spacing:0.06em;">{title}</div>
-          <div style="color:#a78bfa; font-size:0.82rem;">{desc}</div>
+                      margin:0.3em 0 0.6em 0; letter-spacing:0.06em; min-height:2.6em;
+                      display:flex; align-items:center; justify-content:center;">{title}</div>
+          <div style="color:#a78bfa; font-size:0.82rem; line-height:1.5;">{desc}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -198,17 +197,18 @@ callout(
     "This is one of the deepest and most useful ideas in all of science."
 )
 
+st.markdown(
+    f'<img src="{img_b64("assets/you_did_it.jpg")}" alt="You did it!" '
+    f'style="width:100%; border-radius:22px; margin-bottom:0.6rem; '
+    f'box-shadow: 0 8px 32px rgba(124,58,237,0.45), 0 2px 18px rgba(255,224,102,0.20);" />',
+    unsafe_allow_html=True,
+)
 st.markdown("""
-<div class="cosmic-card" style="text-align:center; padding:1.3rem 1rem;">
-  <div style="font-size:2.2rem; margin-bottom:0.4em;">🪐</div>
-  <div style="font-family:'Orbitron',sans-serif; color:#f59e0b; font-size:1rem;
-              letter-spacing:0.1em; margin-bottom:0.6em;">YOU DID IT.</div>
-  <div style="color:#d4c5f9;">
-    You have now explored superposition, how it scales across qubits, and entanglement,
-    the three ideas at the very heart of quantum computing.
-    That is more than most adults will ever understand about the quantum world.
-    <b style="color:#ffe066;">Welcome to the future.</b>
-  </div>
+<div class="cosmic-card" style="text-align:center; padding:1.1rem 1rem; color:#d4c5f9;">
+  You have now explored superposition, how it scales across qubits, and entanglement,
+  the three ideas at the very heart of quantum computing.
+  That is more than most adults will ever understand about the quantum world.
+  <b style="color:#ffe066;">Welcome to the future.</b>
 </div>
 """, unsafe_allow_html=True)
 
@@ -219,4 +219,4 @@ st.markdown("""
 """, unsafe_allow_html=True)
 st.write("")
 next_module_button("MODULE 4: GATES LAB 🎛️", "pages/4_Gates_Lab.py", "next_gates_lab")
-st.page_link("Home.py", label="← Back to Home")
+st.page_link("Home.py", label="🚀 Return to Mission Control")

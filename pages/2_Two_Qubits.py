@@ -12,19 +12,17 @@ from quantum_style import (
     show_fig, ket_explainer,
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, mark_complete, next_module_button, coin_html,
-    render_stepper,
+    render_stepper, render_hero_img,
 )
 
-st.set_page_config(page_title="Two Qubits | Quantum Playground", page_icon="🎲", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Two Qubits | Quantum Playground", page_icon="🎲", layout="centered", initial_sidebar_state="auto")
 inject_quantum_css()
 render_sidebar("two_qubits")
 
 
 # ── Hero ───────────────────────────────────────────────────────────────────────
-render_hero(
-    title="🎲 MODULE 2: TWO QUBITS",
-    subtitle="When superposition starts to multiply",
-)
+render_hero_img("assets/hero_two_qubits.jpg",
+                "Mission 2: Two Qubits. Possibilities multiply.")
 render_stepper("two_qubits")
 
 # ── Recap ──────────────────────────────────────────────────────────────────────
@@ -35,7 +33,7 @@ callout(
 )
 
 # ── Part 1: Two normal coins ───────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🪙 Two normal coins</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Two normal coins</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -64,7 +62,7 @@ if st.session_state.classical_two:
     )
 
 # ── Part 2: Two quantum coins ──────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">⚛️ Two quantum coins</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Two quantum coins</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -99,7 +97,7 @@ callout(
 )
 
 # ── Part 3: The big idea ───────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">💥 Why this is a big deal</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Why this is a big deal</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card">
@@ -133,7 +131,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Part 4: Observe ────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🔮 What happens when we look?</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">What happens when we look?</div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="cosmic-card" style="color:#d4c5f9;">
@@ -222,4 +220,4 @@ st.markdown("""
 """, unsafe_allow_html=True)
 st.write("")
 next_module_button("MODULE 3: ENTANGLEMENT 🔗", "pages/3_Entanglement.py", "next_entanglement")
-st.page_link("Home.py", label="← Back to Home")
+st.page_link("Home.py", label="🚀 Return to Mission Control")

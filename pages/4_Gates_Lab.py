@@ -12,10 +12,10 @@ from quantum_style import (
     show_fig, ket_explainer,
     inject_quantum_css, render_hero, callout, dark_bar_chart,
     render_sidebar, bloch_sphere_fig, bloch_2d_fig, mark_complete, coin_html,
-    render_stepper,
+    render_stepper, render_hero_img,
 )
 
-st.set_page_config(page_title="Gates Lab | Quantum Playground", page_icon="🎛️", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Gates Lab | Quantum Playground", page_icon="🎛️", layout="centered", initial_sidebar_state="auto")
 inject_quantum_css()
 render_sidebar("gates_lab")
 
@@ -23,10 +23,8 @@ render_sidebar("gates_lab")
 MAX_GATES = 8
 
 # ── Hero ───────────────────────────────────────────────────────────────────────
-render_hero(
-    title="🎛️ MODULE 4: GATES LAB",
-    subtitle="Take the controls: build your own quantum circuit",
-)
+render_hero_img("assets/hero_gates_lab.jpg",
+                "Mission 4: Gates Lab. Build your own circuits.")
 render_stepper("gates_lab")
 
 # ── Intro ──────────────────────────────────────────────────────────────────────
@@ -40,7 +38,7 @@ Stack gates below and watch the arrow and the probabilities respond
 """, unsafe_allow_html=True)
 
 # ── Gate palette ───────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🧰 Your gate toolbox</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Your gate toolbox</div>', unsafe_allow_html=True)
 
 if "lab_gates" not in st.session_state:
     st.session_state.lab_gates = []
@@ -98,7 +96,7 @@ if len(st.session_state.lab_gates) >= 2:
     mark_complete("gates_lab")
 
 # ── Circuit display ────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🔬 Your circuit right now</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Your circuit right now</div>', unsafe_allow_html=True)
 
 if st.session_state.lab_gates:
     chips = []
@@ -113,7 +111,7 @@ if st.session_state.lab_gates:
     st.markdown(f"""
     <div class="cosmic-card" style="text-align:center; padding:0.9rem;">
       <span style="color:#a78bfa; font-family:'Orbitron',sans-serif; font-size:0.85rem;">|0⟩ →</span>
-      {' <span style="color:#6b7280;">→</span> '.join(chips)}
+      {' <span style="color:#9ca3af;">→</span> '.join(chips)}
       <span style="color:#a78bfa; font-family:'Orbitron',sans-serif; font-size:0.85rem;">→ 📏</span>
     </div>
     """, unsafe_allow_html=True)
@@ -139,7 +137,7 @@ use_2d = st.toggle("Sphere not showing? Switch to the 2D view", key="bloch_2d_la
 if use_2d:
     show_fig(bloch_2d_fig(sv, title="Live Bloch view: the arrow IS your qubit"))
     st.markdown(
-        '<div style="color:#6b7280; font-size:0.82rem; text-align:center;">'
+        '<div style="color:#9ca3af; font-size:0.82rem; text-align:center;">'
         'Nothing is hidden in this flat view: X, H, Z, and RY always keep '
         'the arrow in this slice of the sphere.</div>',
         unsafe_allow_html=True,
@@ -154,7 +152,7 @@ else:
 show_fig(dark_bar_chart({"Heads": p_heads, "Tails": p_tails}, "Measurement chances right now"))
 
 # ── Measure ────────────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🔮 Measure it!</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Measure it!</div>', unsafe_allow_html=True)
 
 if "lab_results" not in st.session_state:
     st.session_state.lab_results = []
@@ -182,14 +180,14 @@ if st.session_state.lab_results:
     st.markdown(f"""
     <div class="cosmic-card" style="text-align:center; padding:0.8rem;">
       {coin_html("H", 26)} <b style="color:#ffe066;">{heads}</b>
-      <span style="color:#6b7280;"> · </span>
+      <span style="color:#9ca3af;"> · </span>
       {coin_html("T", 26)} <b style="color:#a78bfa;">{tails}</b>
-      <span style="color:#6b7280;"> out of {heads + tails} measurements of this circuit</span>
+      <span style="color:#9ca3af;"> out of {heads + tails} measurements of this circuit</span>
     </div>
     """, unsafe_allow_html=True)
 
 # ── Gate reference ─────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">📖 What does each gate do?</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">What does each gate do?</div>', unsafe_allow_html=True)
 
 r1, r2 = st.columns(2)
 for col, icon, name, desc in [
@@ -211,7 +209,7 @@ for col, icon, name, desc in [
 ket_explainer()
 
 # ── Challenges ─────────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🏆 Lab challenges</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Lab challenges</div>', unsafe_allow_html=True)
 
 callout(
     "<b style='color:#ffe066;'>Can you…</b><br>"
@@ -236,7 +234,7 @@ callout(
 # ── What's next ────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="cosmic-card" style="text-align:center; padding:1.2rem 1rem;">
-  <div style="font-size:2rem; margin-bottom:0.3em;">🚀</div>
+  
   <div style="font-family:'Orbitron',sans-serif; color:#f59e0b; font-size:1rem;
               letter-spacing:0.1em; margin-bottom:0.6em;">READY FOR THE REAL THING?</div>
   <div style="color:#d4c5f9; font-size:0.95rem;">
@@ -254,4 +252,4 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.page_link("Home.py", label="← Back to Home")
+st.page_link("Home.py", label="🚀 Return to Mission Control")

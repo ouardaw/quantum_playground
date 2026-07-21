@@ -5,8 +5,20 @@ glowing cosmic-card, 3-D sidebar nav buttons (amber/orange) and
 3-D page-body buttons (purple/blue).
 """
 
+import base64
+from functools import lru_cache
+from pathlib import Path
+
 import streamlit as st
 import matplotlib.pyplot as plt
+
+
+@lru_cache(maxsize=16)
+def img_b64(rel_path: str) -> str:
+    """Return a data-URI for an image in the project, cached per process."""
+    p = Path(__file__).parent / rel_path
+    mime = "jpeg" if p.suffix.lower() in (".jpg", ".jpeg") else p.suffix.lstrip(".").lower()
+    return f"data:image/{mime};base64," + base64.b64encode(p.read_bytes()).decode()
 
 
 # ── colour palette ─────────────────────────────────────────────────────────────
@@ -344,6 +356,17 @@ def inject_quantum_css():
         color: #cecbf6;
     }
 
+    /* ── Sidebar logo (coin pair with breathing glow) ─────────────── */
+    .qp-logo {
+        display: inline-flex;
+        align-items: center;
+        animation: logoPulse 4s ease-in-out infinite;
+    }
+    @keyframes logoPulse {
+        0%, 100% { filter: drop-shadow(0 0 5px rgba(124,58,237,0.55)); }
+        50%      { filter: drop-shadow(0 0 13px rgba(245,158,11,0.75)); }
+    }
+
     /* ── Orb blobs for hero ───────────────────────────────────────── */
     .orb { position:absolute; border-radius:50%; filter:blur(38px); opacity:0.55; pointer-events:none; }
     .orb1 { width:80px; height:80px; background:radial-gradient(circle,#ffb800,transparent); top:10%; left:8%; animation:orbFloat1 15s ease-in-out infinite; }
@@ -399,71 +422,203 @@ def render_sidebar(active: str = "home"):
     completed = st.session_state.setdefault("completed", set())
 
     with st.sidebar:
-        # ── Compact wordmark ──────────────────────────────────────
-        st.markdown("""
-        <div style="text-align:center; margin: 0.2em 0 0.9em 0;">
-          <div style="font-size:1.7rem; margin-bottom:0.1em;">⚛️</div>
-          <div style="font-family:'Orbitron',sans-serif; font-size:0.98rem;
-                      font-weight:700; letter-spacing:0.16em; line-height:1.5;
-                      background: linear-gradient(90deg, #ffe066 0%, #f59e0b 50%, #a78bfa 100%);
-                      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-                      background-clip: text;">
-            QUANTUM<br>PLAYGROUND
-          </div>
-        </div>
-        <div style="border-top:1px solid rgba(124,58,237,0.30); margin:0 0 0.9em 0;"></div>
-        """, unsafe_allow_html=True)
-
-        # ── Active page gets the full amber 3-D treatment ─────────
+        # ── Brand tile doubles as the Home button ─────────────────
+        tile_src = img_b64("assets/sidebar_logo_tile.jpg")
+        if active == "home":
+            home_state = """
+            border: 2.5px solid rgba(245,158,11,0.75) !important;
+            box-shadow: 0 0 26px rgba(245,158,11,0.40) !important;
+            """
+        else:
+            home_state = """
+            border: 2px solid rgba(124,58,237,0.35) !important;
+            box-shadow: 0 6px 24px rgba(124,58,237,0.30) !important;
+            """
         st.markdown(f"""
         <style>
-        section[data-testid="stSidebar"] .st-key-nav_{active} button {{
-            {AMBER_SOLID}
+        section[data-testid="stSidebar"] .st-key-nav_home button {{
+            background: url('{tile_src}') center / cover no-repeat !important;
+            aspect-ratio: 1 / 1 !important;
+            height: auto !important;
+            width: 74% !important;
+            margin: 0 auto !important;
+            display: block !important;
+            border-radius: 22px !important;
+            padding: 0 !important;
+            {home_state}
         }}
-        section[data-testid="stSidebar"] .st-key-nav_{active} button:hover {{
-            color: #fff !important;
-            transform: translateY(2px) !important;
-            box-shadow:
-                0 3px 0 #dc2626,
-                0 5px 8px rgba(0,0,0,0.40),
-                0 0 24px rgba(251,146,60,0.55) !important;
+        section[data-testid="stSidebar"] .st-key-nav_home button:hover {{
+            transform: translateY(-2px) !important;
+            border-color: rgba(245,158,11,0.85) !important;
+            box-shadow: 0 0 30px rgba(245,158,11,0.45) !important;
         }}
         </style>
         """, unsafe_allow_html=True)
+        if st.button(" ", key="nav_home", use_container_width=True, help="Back to Mission Control (Home)"):
+            st.switch_page("Home.py")
+        st.markdown('<div style="border-top:1px solid rgba(124,58,237,0.30); margin:0.3em 0 0.9em 0;"></div>', unsafe_allow_html=True)
 
-        # ── Navigation buttons (✅ = module completed) ─────────────
-        pages = [("home", "🌌", "HOME", "", "Home.py")] + [
-            (key, icon, label, sub, path) for key, icon, label, sub, path in MODULES
-        ]
-        for key, icon, label, _sub, path in pages:
-            check = "  ✅" if key in completed else ""
-            if st.button(f"{icon}  {label}{check}", key=f"nav_{key}", use_container_width=True):
-                st.switch_page(path)
+        # ── Nav links (Mission Control / Glossary / About) ─────────
+        # whichever page you are on gets the amber "you are here" treatment
+        active_key = {"home": "nav_mc", "glossary": "nav_glossary",
+                      "about": "nav_about"}.get(active)
+        active_css = ""
+        if active_key:
+            active_css = f"""
+            section[data-testid="stSidebar"] .st-key-{active_key} button {{ {AMBER_SOLID} }}
+            section[data-testid="stSidebar"] .st-key-{active_key} button:hover {{
+                color: #fff !important;
+                border-color: transparent !important;
+            }}"""
+        st.markdown(f"""
+        <style>
+        section[data-testid="stSidebar"] .st-key-nav_mc button,
+        section[data-testid="stSidebar"] .st-key-nav_glossary button,
+        section[data-testid="stSidebar"] .st-key-nav_about button {{
+            font-size: 0.84rem !important;
+            padding: 0.65em 0.4em !important;
+            border-radius: 14px !important;
+            margin-bottom: 0.45em !important;
+        }}
+        {active_css}
+        </style>
+        """, unsafe_allow_html=True)
+        if st.button("MISSION CONTROL", key="nav_mc", use_container_width=True):
+            st.switch_page("Home.py")
+        if st.button("GLOSSARY", key="nav_glossary", use_container_width=True):
+            st.switch_page("pages/5_Glossary.py")
+        if st.button("ABOUT", key="nav_about", use_container_width=True):
+            st.switch_page("pages/6_About.py")
 
-        # ── Mission progress bar ───────────────────────────────────
+        # ── MISSION PROGRESS: status card ──────────────────────────
         done = len(completed & set(MODULE_KEYS))
         total = len(MODULE_KEYS)
         pct = int(done / total * 100)
-        trophy = " 🏆" if done == total else ""
+        success = done == total
+        trophy = " 🏆" if success else ""
+        if success:
+            card_title = '<span style="color:#ffe066;">🏆 MISSION SUCCESS!!</span>'
+            stripe = "#f59e0b"
+        else:
+            card_title = '<span style="color:#a78bfa;">📡 MISSION PROGRESS</span>'
+            stripe = "#7c3aed"
+        icon_row = "".join(
+            f'<span style="font-size:1.15rem; margin:0 0.18em; '
+            f'opacity:{1 if key in completed else 0.35};">{icon}{"✅" if key in completed else ""}</span>'
+            for key, icon, _l, _s, _p in MODULES
+        )
+        prog_src = img_b64("assets/progress_bg.jpg")
         st.markdown(f"""
-        <div style="margin-top:0.9em;">
-          <div style="font-family:'Orbitron',sans-serif; font-size:0.8rem;
-                      letter-spacing:0.14em; text-align:center; margin-bottom:0.35em;
-                      background: linear-gradient(90deg, #ffe066 0%, #f59e0b 50%, #a78bfa 100%);
-                      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-                      background-clip: text;">
-            MISSION PROGRESS: {done}/{total}{trophy}
+        <div style="background:
+                        linear-gradient(100deg, rgba(15,15,35,0.78) 30%, rgba(15,15,35,0.30) 75%, rgba(15,15,35,0.15)),
+                        url('{prog_src}') right center / cover no-repeat;
+                    border: 2px solid rgba(255,255,255,0.10); border-left: 4px solid {stripe};
+                    border-radius: 22px;
+                    padding: 1rem 1rem 0.9rem 1rem; margin-top: 0.8em; text-align: left;
+                    box-shadow: 0 4px 20px rgba(124,58,237,0.20);">
+          <div style="font-family:'Orbitron',sans-serif; font-size:0.82rem;
+                      letter-spacing:0.08em; margin-bottom:0.35em;
+                      text-shadow: 0 2px 6px rgba(0,0,0,0.9);">
+            {card_title}
           </div>
-          <div style="background:rgba(124,58,237,0.18); border-radius:10px; height:13px;
-                      overflow:hidden; border:1px solid rgba(124,58,237,0.45);
-                      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);">
+          <div style="font-family:'Orbitron',sans-serif; font-size:1.7rem; color:#ffe066;
+                      margin-bottom:0.4em; text-shadow: 0 2px 8px rgba(0,0,0,0.95);">{done}/{total}{trophy}</div>
+          <div style="background:rgba(15,15,35,0.75); border-radius:10px; height:13px;
+                      overflow:hidden; border:1.5px solid rgba(167,139,250,0.65);
+                      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); margin-bottom:0.6em;">
             <div style="width:{pct}%; height:100%;
                         background:linear-gradient(90deg,#f59e0b,#fb923c,#7c3aed);
                         border-radius:10px; transition:width 0.6s ease;
                         box-shadow: 0 0 10px rgba(245,158,11,0.6);"></div>
           </div>
+          <div>{icon_row}</div>
         </div>
         """, unsafe_allow_html=True)
+
+
+# ── Site footer ────────────────────────────────────────────────────────────────
+def render_footer():
+    """Illustrated feature badges + credit line. Shared across every page.
+
+    The icons are artwork; the text is real HTML so it stays crisp and
+    readable at any width (an image strip shrank the text to ~50%)."""
+    badges = [
+        ("icon_circuits", "Real quantum circuits", "Powered by Qiskit",   "#ffe066"),
+        ("icon_safe",     "Safe &amp; kid friendly", "Designed for curious minds", "#c4b5fd"),
+        ("icon_learn",    "Learn by doing",       "See results in real time",  "#c4b5fd"),
+        ("icon_free",     "Always free",          "No sign up required",  "#ffe066"),
+    ]
+    cells = ""
+    for asset, title, sub, colour in badges:
+        try:
+            icon = (f'<img src="{img_b64(f"assets/{asset}.jpg")}" alt="" '
+                    f'style="width:46px; height:46px; border-radius:11px; flex-shrink:0;" />')
+        except FileNotFoundError:
+            icon = ""
+        cells += (
+            f'<div style="display:flex; align-items:center; gap:0.7em; '
+            f'flex:1 1 240px; min-width:220px;">{icon}'
+            f'<div><div style="color:{colour}; font-size:0.92rem; font-weight:600; '
+            f'line-height:1.3;">{title}</div>'
+            f'<div style="color:#c9c2e8; font-size:0.85rem; line-height:1.3;">{sub}</div></div>'
+            f'</div>'
+        )
+    st.markdown(f"""
+    <div style="margin-top:1.6rem; padding:1.1rem 1.3rem;
+                background: linear-gradient(120deg, rgba(131,56,236,0.14), rgba(59,134,255,0.09));
+                border:1.5px solid rgba(124,58,237,0.30); border-radius:18px;
+                display:flex; flex-wrap:wrap; gap:1.1em 1.4em;">
+      {cells}
+    </div>
+    {_social_links()}
+    <div style="text-align:center; color:#9ca3af; font-size:0.85rem;
+                margin-top:0.7rem; letter-spacing:0.04em; line-height:1.6;">
+      Built by <b style="color:#a78bfa;">Ouarda Wilson</b>, IBM Qiskit Advocate ·
+      Powered by Qiskit + Streamlit<br>
+      <span style="font-size:0.8rem;">A personal project, not affiliated with or endorsed by IBM.</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# ── Contact links (inline SVG so they stay crisp at any size) ─────────────────
+_ICON_PATHS = {
+    "github": ("M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 "
+               "0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 "
+               "17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 "
+               "1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 "
+               "1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 "
+               "3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 "
+               "3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 "
+               "1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"),
+    "linkedin": ("M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 "
+                 "2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 "
+                 "4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 "
+                 "4.125zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 "
+                 "23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"),
+    "email": ("M0 3v18h24V3H0zm21.518 2L12 12.713 2.482 5h19.036zM2 19V7.183l10 8.104 10-8.104V19H2z"),
+}
+
+
+def _social_links() -> str:
+    links = [
+        ("github", "https://github.com/ouardaw", "GitHub"),
+        ("linkedin", "https://www.linkedin.com/in/ouarda-jw/", "LinkedIn"),
+        ("email", "mailto:contact@orionascend.com", "Email"),
+    ]
+    out = ""
+    for key, href, label in links:
+        out += (
+            f'<a href="{href}" target="_blank" rel="noopener noreferrer" '
+            f'aria-label="{label}" title="{label}" '
+            f'style="display:inline-flex; align-items:center; justify-content:center; '
+            f'width:40px; height:40px; margin:0 0.35em; border-radius:50%; '
+            f'border:1.5px solid rgba(167,139,250,0.45); '
+            f'background:rgba(124,58,237,0.12); text-decoration:none;">'
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" '
+            f'width="19" height="19" fill="#c4b5fd"><path d="{_ICON_PATHS[key]}"/></svg>'
+            f'</a>'
+        )
+    return (f'<div style="text-align:center; margin-top:1rem;">{out}</div>')
 
 
 # ── Mission stepper (top of every module page; mobile-friendly nav) ────────────
@@ -471,65 +626,105 @@ def render_stepper(active: str):
     """Horizontal 1-2-3-4 progress chips. Click any chip to jump to that module."""
     completed = st.session_state.setdefault("completed", set())
 
+    base = """
+        font-size: 0.72rem !important;
+        padding: 0.7em 0.1em !important;
+        border-radius: 16px !important;
+        letter-spacing: 0.01em !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        min-height: 3.5em !important;
+    """
     rules = []
     for key, _icon, _label, _sub, _path in MODULES:
         sel = f".st-key-step_{key} button"
         if key == active:
             rules.append(f"""
             {sel} {{
-                {AMBER_SOLID}
-                font-size: 0.76rem !important;
-                padding: 0.55em 0.2em !important;
-                border-radius: 10px !important;
-                letter-spacing: 0.04em !important;
+                background: linear-gradient(120deg, rgba(245,158,11,0.24), rgba(131,56,236,0.14)) !important;
+                color: #ffe066 !important;
+                border: 2px solid rgba(245,158,11,0.55) !important;
+                border-left: 4px solid #f59e0b !important;
+                box-shadow: 0 0 18px rgba(245,158,11,0.30) !important;
+                {base}
             }}""")
         elif key in completed:
             rules.append(f"""
             {sel} {{
-                background: rgba(29,158,117,0.14) !important;
+                background: linear-gradient(120deg, rgba(29,158,117,0.16), rgba(59,134,255,0.10)) !important;
                 color: #7ee2b0 !important;
-                border: 1px solid rgba(126,226,176,0.45) !important;
-                box-shadow: none !important;
-                font-size: 0.76rem !important;
-                padding: 0.55em 0.2em !important;
-                border-radius: 10px !important;
-                letter-spacing: 0.04em !important;
+                border: 2px solid rgba(255,255,255,0.10) !important;
+                border-left: 4px solid #1d9e75 !important;
+                box-shadow: 0 2px 12px rgba(29,158,117,0.15) !important;
+                {base}
             }}
             {sel}:hover {{
-                background: rgba(29,158,117,0.25) !important;
+                background: linear-gradient(120deg, rgba(29,158,117,0.28), rgba(59,134,255,0.16)) !important;
                 color: #7ee2b0 !important;
-                border-color: rgba(126,226,176,0.9) !important;
-                box-shadow: none !important;
+                border-left-color: #7ee2b0 !important;
                 transform: translateY(-1px) !important;
             }}""")
         else:
             rules.append(f"""
             {sel} {{
-                background: rgba(34,42,82,0.55) !important;
-                color: #aab3d8 !important;
-                border: 1px solid rgba(124,58,237,0.30) !important;
-                box-shadow: none !important;
-                font-size: 0.76rem !important;
-                padding: 0.55em 0.2em !important;
-                border-radius: 10px !important;
-                letter-spacing: 0.04em !important;
+                background: linear-gradient(120deg, rgba(131,56,236,0.16), rgba(59,134,255,0.10)) !important;
+                color: #cdc4f5 !important;
+                border: 2px solid rgba(255,255,255,0.10) !important;
+                border-left: 4px solid #7c3aed !important;
+                box-shadow: 0 2px 12px rgba(124,58,237,0.12) !important;
+                {base}
             }}
             {sel}:hover {{
-                background: rgba(34,42,82,0.85) !important;
+                background: linear-gradient(120deg, rgba(131,56,236,0.30), rgba(59,134,255,0.18)) !important;
                 color: #ffe066 !important;
-                border-color: rgba(245,158,11,0.7) !important;
-                box-shadow: none !important;
+                border-left-color: #f59e0b !important;
                 transform: translateY(-1px) !important;
             }}""")
 
+    home_icon_src = img_b64("assets/home_icon.jpg")
+    rules.append(f"""
+    .st-key-step_home button {{
+        background: url('{home_icon_src}') center / cover no-repeat !important;
+        border: 2px solid rgba(167,139,250,0.40) !important;
+        box-shadow: 0 2px 12px rgba(124,58,237,0.12) !important;
+        color: transparent !important;
+        padding: 0 !important;
+        border-radius: 16px !important;
+        min-height: 3.5em !important;
+    }}
+    .st-key-step_home button:hover {{
+        border-color: rgba(245,158,11,0.7) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 0 16px rgba(245,158,11,0.30) !important;
+    }}""")
+
     st.markdown(f"<style>{''.join(rules)}</style>", unsafe_allow_html=True)
 
-    cols = st.columns(4)
-    for col, (i, (key, _icon, label, _sub, path)) in zip(cols, enumerate(MODULES, 1)):
-        prefix = "✓ " if key in completed and key != active else f"{i} · "
+    cols = st.columns([0.38, 1, 1, 1, 1], gap="small")
+    with cols[0]:
+        if st.button(" ", key="step_home", use_container_width=True, help="Back to Mission Control (Home)"):
+            st.switch_page("Home.py")
+    for col, (i, (key, _icon, label, _sub, path)) in zip(cols[1:], enumerate(MODULES, 1)):
+        prefix = "✓" if key in completed and key != active else f"{i}"
         with col:
-            if st.button(f"{prefix}{label}", key=f"step_{key}", use_container_width=True):
+            if st.button(f"{prefix}·{label}", key=f"step_{key}", use_container_width=True):
                 st.switch_page(path)
+
+
+# ── Image hero banner (module pages with artwork) ─────────────────────────────
+def render_hero_img(asset_path: str, alt: str):
+    """Full-width artwork hero. Falls back gracefully if the asset is missing."""
+    try:
+        src = img_b64(asset_path)
+    except FileNotFoundError:
+        return
+    st.markdown(
+        f'<img src="{src}" alt="{alt}" '
+        f'style="width:100%; border-radius:22px; margin-bottom:0.6rem; '
+        f'box-shadow: 0 8px 32px rgba(124,58,237,0.45), 0 2px 18px rgba(255,224,102,0.20);" />',
+        unsafe_allow_html=True,
+    )
 
 
 # ── Hero banner ────────────────────────────────────────────────────────────────
@@ -643,7 +838,7 @@ def bloch_sphere_fig(statevector, title="Your qubit on the Bloch sphere"):
     # Vertical axis |0> to |1>
     fig.add_scatter3d(
         x=[0, 0], y=[0, 0], z=[-1.15, 1.15],
-        mode="lines", line=dict(color="#6b7280", width=2, dash="dash"),
+        mode="lines", line=dict(color="#9ca3af", width=2, dash="dash"),
         hoverinfo="skip", showlegend=False,
     )
 
@@ -666,7 +861,7 @@ def bloch_sphere_fig(statevector, title="Your qubit on the Bloch sphere"):
         x=[0, 0, 1.25], y=[0, 0, 0], z=[1.3, -1.3, 0],
         mode="text",
         text=["|0⟩  Heads", "|1⟩  Tails", "superposition"],
-        textfont=dict(size=13, color=[GOLD2, MUTED, GOLD]),
+        textfont=dict(size=15, color=[GOLD2, MUTED, GOLD]),
         hoverinfo="skip", showlegend=False,
     )
 
@@ -699,13 +894,13 @@ def bloch_2d_fig(statevector, title="Your qubit (2D view)"):
     bx = 2 * (np.conj(a) * b).real
     bz = abs(a) ** 2 - abs(b) ** 2
 
-    fig, ax = plt.subplots(figsize=(4.4, 4.4), facecolor=BG_MID)
+    fig, ax = plt.subplots(figsize=(4.4, 4.4), facecolor=BG_MID, dpi=200)
     ax.set_facecolor(BG_DEEP)
 
     t = np.linspace(0, 2 * np.pi, 200)
     ax.plot(np.cos(t), np.sin(t), color=PURPLE2, lw=1.6)
     ax.axhline(0, color=GOLD, lw=1.1, ls="--", alpha=0.65)
-    ax.axvline(0, color="#6b7280", lw=0.8, ls=":", alpha=0.6)
+    ax.axvline(0, color="#9ca3af", lw=0.8, ls=":", alpha=0.6)
 
     ax.annotate(
         "", xy=(bx, bz), xytext=(0, 0),
@@ -714,7 +909,7 @@ def bloch_2d_fig(statevector, title="Your qubit (2D view)"):
 
     ax.text(0, 1.14, "|0⟩  Heads", ha="center", color=GOLD2, fontsize=11, fontweight="bold")
     ax.text(0, -1.24, "|1⟩  Tails", ha="center", color=MUTED, fontsize=11, fontweight="bold")
-    ax.text(1.04, 0.05, "superposition", color=GOLD, fontsize=8, alpha=0.9)
+    ax.text(1.04, 0.05, "superposition", color=GOLD, fontsize=9, alpha=0.95)
 
     ax.set_xlim(-1.4, 1.55)
     ax.set_ylim(-1.4, 1.35)
@@ -731,14 +926,14 @@ def dark_bar_chart(probs: dict, title: str, figsize=(5.5, 3.2)):
     values = [probs[k] * 100 for k in labels]
     colors = CHART_COLORS[: len(labels)]
 
-    fig, ax = plt.subplots(figsize=figsize, facecolor=BG_MID)
+    fig, ax = plt.subplots(figsize=figsize, facecolor=BG_MID, dpi=200)
     ax.set_facecolor(BG_DEEP)
 
     bars = ax.bar(labels, values, color=colors, edgecolor=MUTED, linewidth=0.6, width=0.55)
     ax.set_ylim(0, 115)
-    ax.set_ylabel("Chance (%)", color=MUTED, fontsize=10)
+    ax.set_ylabel("Chance (%)", color=MUTED, fontsize=11)
     ax.set_title(title, color=GOLD, fontsize=11, fontweight="bold", pad=10)
-    ax.tick_params(colors="#d4c5f9", labelsize=9)
+    ax.tick_params(colors="#e3d9ff", labelsize=11)
 
     for spine in ax.spines.values():
         spine.set_edgecolor(f"{PURPLE}55")
@@ -750,7 +945,7 @@ def dark_bar_chart(probs: dict, title: str, figsize=(5.5, 3.2)):
             f"{v:.0f}%",
             ha="center",
             fontweight="bold",
-            fontsize=9,
+            fontsize=10,
             color=GOLD2,
         )
 

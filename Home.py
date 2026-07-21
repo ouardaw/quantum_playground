@@ -7,23 +7,27 @@ Built by Ouarda Wilson, IBM Qiskit Advocate.
 import streamlit as st
 from quantum_style import (
     inject_quantum_css, render_hero, cosmic_card, callout,
-    render_sidebar, MODULES, AMBER_SOLID,
+    render_sidebar, MODULES, AMBER_SOLID, img_b64, render_footer,
 )
 
 st.set_page_config(
     page_title="Quantum Playground",
     page_icon="⚛️",
     layout="centered",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 inject_quantum_css()
 render_sidebar("home")
 
 # ── Hero ───────────────────────────────────────────────────────────────────────
-render_hero(
-    title="⚛️ QUANTUM PLAYGROUND",
-    subtitle="Step into the weirdest corner of the universe!!!",
+st.markdown(
+    f'<img src="{img_b64("assets/hero_home.jpg")}" '
+    f'style="width:100%; border-radius:22px; margin-bottom:0.6rem; '
+    f'box-shadow: 0 8px 32px rgba(124,58,237,0.45), 0 2px 18px rgba(255,224,102,0.20);" '
+    f'alt="Quantum Playground: explore, experiment, understand. Learn the basics of '
+    f'quantum computing through interactive simulations and fun experiments." />',
+    unsafe_allow_html=True,
 )
 
 # ── Intro ──────────────────────────────────────────────────────────────────────
@@ -39,7 +43,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Mission map ────────────────────────────────────────────────────────────────
-st.markdown('<div class="cosmic-section">🗺️ Your mission map</div>', unsafe_allow_html=True)
+st.markdown('<div class="cosmic-section">Your mission map</div>', unsafe_allow_html=True)
 
 completed = st.session_state.setdefault("completed", set())
 target = next((k for k, *_ in MODULES if k not in completed), None)
@@ -111,28 +115,24 @@ for row in (MODULES[:2], MODULES[2:]):
         elif key == target:
             badge = '<span style="color:#f59e0b;">▶ up now</span>'
         else:
-            badge = '<span style="color:#6b7280;">up next</span>'
+            badge = '<span style="color:#9ca3af;">up next</span>'
         with col:
+            art = img_b64(f"assets/card_{key}.jpg")
             st.markdown(f"""
             <div class="cosmic-card" style="border-left: 4px solid {accent}; border-radius: 22px;
-                        padding: 0.9rem 1.05rem; margin-bottom: 0.55rem; min-height: 128px;">
+                        padding: 0.9rem 1.05rem; margin-bottom: 0.55rem;">
+              <img src="{art}" style="width:100%; aspect-ratio: 15/8; object-fit: cover; border-radius:14px; margin-bottom:0.6em;" alt="" />
               <div style="display:flex; justify-content:space-between; align-items:baseline; gap:0.4em;">
                 <span style="font-family:'Orbitron',sans-serif; font-size:0.92rem; color:{title_color};
-                             letter-spacing:0.05em;">{icon} {i}. {label}</span>
-                <span style="font-size:0.76rem; white-space:nowrap;">{badge}</span>
+                             letter-spacing:0.05em;">{i}. {label}</span>
+                <span style="font-size:0.82rem; white-space:nowrap;">{badge}</span>
               </div>
-              <div style="color:#d4c5f9; font-size:0.87rem; margin-top:0.5em; line-height:1.45;">{blurbs[key]}</div>
+              <div style="color:#d4c5f9; font-size:0.87rem; margin-top:0.5em; line-height:1.45; min-height:3em;">{blurbs[key]}</div>
             </div>
             """, unsafe_allow_html=True)
-            btn_label = "↺ REPLAY" if key in completed else ("▶ CONTINUE" if key == target else "OPEN")
+            btn_label = "↺ REPLAY" if key in completed else "▶ START MISSION"
             if st.button(btn_label, key=f"map_{key}", use_container_width=True):
                 st.switch_page(path)
 
 # ── Footer ─────────────────────────────────────────────────────────────────────
-st.write("")
-st.markdown("""
-<div style="text-align:center; color:#6b7280; font-size:0.85rem; margin-top:1rem; letter-spacing:0.05em;">
-  Built by <b style="color:#a78bfa;">Ouarda Wilson</b>, IBM Qiskit Advocate ·
-  Powered by Qiskit + Streamlit
-</div>
-""", unsafe_allow_html=True)
+render_footer()

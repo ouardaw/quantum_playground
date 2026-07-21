@@ -5,3 +5,8 @@ backgroundColor = "#0f0f23"
 secondaryBackgroundColor = "#1a1a2e"
 textColor = "#f8fafc"
 font = "sans serif"
+
+[server]
+# Serve artwork from static/ so the browser caches it once, instead of
+# re-sending ~400KB of inline base64 on every rerun.
+enableStaticServing = true

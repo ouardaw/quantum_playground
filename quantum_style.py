@@ -10,7 +10,9 @@ from functools import lru_cache
 from pathlib import Path
 
 import streamlit as st
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")          # headless, no GUI backend on the server
+from matplotlib.figure import Figure  # thread-safe OO API (pyplot globals are not)
 
 
 @lru_cache(maxsize=16)
@@ -768,11 +770,13 @@ def ket_explainer():
 
 # ── Chart renderer (closes figures to prevent memory leaks on the server) ─────
 def show_fig(fig):
-    """Render a Matplotlib figure and immediately free its memory.
-    Without plt.close, every rerun leaks a figure and the Streamlit Cloud
-    container eventually runs out of memory and dies."""
-    st.pyplot(fig)
-    plt.close(fig)
+    """Render a Matplotlib figure.
+
+    Figures are created with the OO API (matplotlib.figure.Figure), which keeps
+    no global state, so nothing leaks and nothing races across Streamlit's
+    per-session threads. pyplot's global registry is NOT thread-safe and can
+    segfault the interpreter under concurrent reruns."""
+    st.pyplot(fig, clear_figure=False)
 
 
 # ── Quantum coin icon ──────────────────────────────────────────────────────────
@@ -894,7 +898,8 @@ def bloch_2d_fig(statevector, title="Your qubit (2D view)"):
     bx = 2 * (np.conj(a) * b).real
     bz = abs(a) ** 2 - abs(b) ** 2
 
-    fig, ax = plt.subplots(figsize=(4.4, 4.4), facecolor=BG_MID, dpi=200)
+    fig = Figure(figsize=(4.4, 4.4), facecolor=BG_MID, dpi=200)
+    ax = fig.subplots()
     ax.set_facecolor(BG_DEEP)
 
     t = np.linspace(0, 2 * np.pi, 200)
@@ -926,7 +931,8 @@ def dark_bar_chart(probs: dict, title: str, figsize=(5.5, 3.2)):
     values = [probs[k] * 100 for k in labels]
     colors = CHART_COLORS[: len(labels)]
 
-    fig, ax = plt.subplots(figsize=figsize, facecolor=BG_MID, dpi=200)
+    fig = Figure(figsize=figsize, facecolor=BG_MID, dpi=200)
+    ax = fig.subplots()
     ax.set_facecolor(BG_DEEP)
 
     bars = ax.bar(labels, values, color=colors, edgecolor=MUTED, linewidth=0.6, width=0.55)

@@ -1,5 +1,7 @@
-streamlit
-qiskit
-matplotlib
-plotly
-numpy
+# Pinned to stable, mutually-tested majors.
+# Unpinned installs pulled Python 3.14 + newest C-extensions, which segfaulted.
+streamlit>=1.40,<2
+qiskit>=1.2,<3
+matplotlib>=3.8,<4
+plotly>=5.20,<7
+numpy>=1.26,<3
